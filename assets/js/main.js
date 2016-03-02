@@ -32,23 +32,12 @@ app.service('Patients', ['fbRef', '$q', function(fbRef, $q) {
 }]);
 
 app.controller('PatientListCtrl', function($scope, $location, Patients) {
-    $scope.removePatient = function(id) {
-        var ok = confirm('Are you sure to remove this patient?');
-        if (ok) {
-            Patients.remove(id).then(setPatients());
-        }
-    };
-
-    function setPatients() {
-        Patients.list(function() {
-            $scope.loading = true;
-        }).then(function(patients) {
-            $scope.patients = patients;
-            $scope.loading = false;
-        });
-    }
-
-    setPatients();
+	Patients.list(function() {
+        $scope.loading = true;
+    }).then(function(patients) {
+        $scope.patients = patients;
+        $scope.loading = false;
+    });
 });
 
 app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients) {
@@ -66,6 +55,13 @@ app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients
         }
         Patients.save(patient).then($location.path('/patients'));
     }
+    
+    $scope.removePatient = function() {
+        var ok = confirm('Are you sure to remove this patient?');
+        if (ok) {
+            Patients.remove($scope.patient.id).then($location.path('/patients'));
+        }
+    };
 
     var patientId = $routeParams.id;
     if (patientId) {
@@ -110,6 +106,12 @@ app.directive('datatable', function() {
                         }, {
                             data: 'birthDate',
                             defaultContent: ''
+                        }, {
+                        	data: 'id',
+                        	orderable: false,
+                        	render: function (data, type, row, meta) {
+                        		return '<a href="#/patients/' + data + '"><i class="fa fa-pencil-square-o"></i></a>';
+                        	}
                         }]
                     });
                 }
