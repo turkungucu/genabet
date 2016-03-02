@@ -49,11 +49,6 @@ app.controller('PatientListCtrl', function($scope, $location, Patients) {
     }
 
     setPatients();
-    /*$scope.patients = [{
-    	firstName: 'Angelina',
-    	lastName: 'Jolie',
-    	birthDate: '1/1/1985'
-    }];*/
 });
 
 app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients) {
@@ -85,7 +80,7 @@ app.controller('HomeCtrl', function($scope) {
 });
 
 app.controller('ReportsCtrl', function($scope) {
-	// TODO: Implement
+    // TODO: Implement
     $scope.reports = [{
         name: 'My first report',
         ts: '2 days ago'
@@ -95,21 +90,30 @@ app.controller('ReportsCtrl', function($scope) {
     }];
 });
 
-app.directive('datatable', function () {
-	return {
-		restrict: 'A,E',
-		scope: {
-			rows: '='
-		},
-		link: function (scope, element, attrs, controller) {
-			scope.$watch('rows', function () {
-				if (scope.rows) {
-					element.DataTable({
-					    data: scope.rows,
-					    columns: [{ data: 'firstName' }, { data: 'lastName' }, { data: 'birthDate', defaultContent: '' }]
-					}); 
-				}
-			});		
-		}
-	}
+app.directive('datatable', function() {
+    return {
+        restrict: 'A,E',
+        scope: {
+            rows: '='
+        },
+        link: function(scope, element, attrs, controller) {
+            scope.$watch('rows', function() {
+                if (scope.rows) {
+                    element.DataTable({
+                        data: scope.rows,
+                        columns: [{
+                            data: 'firstName',
+                            defaultContent: ''
+                        }, {
+                            data: 'lastName',
+                            defaultContent: ''
+                        }, {
+                            data: 'birthDate',
+                            defaultContent: ''
+                        }]
+                    });
+                }
+            });
+        }
+    }
 });
