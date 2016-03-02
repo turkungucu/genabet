@@ -1,66 +1,3 @@
-// TODO: Put this in a separate module
-function FirebaseCrud(baseRef, q) {
-    this.q = q;
-    this.baseRef = baseRef;
-
-    function idRef(id) {
-        return baseRef.child('/' + id);
-    };
-
-    function copyWoId(obj) {
-        var copy = {};
-        for (var key in obj) {
-            if ('id' !== key) {
-                copy[key] = obj[key];
-            }
-        }
-        return copy;
-    }
-
-    this.save = function(obj) {
-        var p = copyWoId(obj);
-        if (obj.id) {
-            return idRef(obj.id).update(p);
-        } else {
-            return baseRef.push(p);
-        }
-    };
-
-    this.remove = function(id) {
-        return idRef(id).remove();
-    };
-
-    this.list = function(beforeFn) {
-        if (beforeFn) beforeFn();
-
-        var deferred = q.defer();
-        baseRef.once('value', function(result) {
-            var list = [];
-            result.forEach(function(child) {
-                var obj = child.val();
-                obj.id = child.key();
-                list.push(obj);
-            });
-            deferred.resolve(list);
-        }, function(error) {
-            deferred.reject(error);
-        });
-        return deferred.promise;
-    };
-
-    this.get = function(id) {
-        var deferred = q.defer();
-        idRef(id).once('value', function(result) {
-            var obj = result.val();
-            obj.id = result.key();
-            deferred.resolve(obj);
-        }, function(error) {
-            deferred.reject(error);
-        });
-        return deferred.promise;
-    };
-}
-
 var app = angular.module('main', ['ngRoute']);
 
 app.config(function($routeProvider) {
@@ -112,6 +49,11 @@ app.controller('PatientListCtrl', function($scope, $location, Patients) {
     }
 
     setPatients();
+    /*$scope.patients = [{
+    	firstName: 'Angelina',
+    	lastName: 'Jolie',
+    	birthDate: '1/1/1985'
+    }];*/
 });
 
 app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients) {
@@ -151,4 +93,23 @@ app.controller('ReportsCtrl', function($scope) {
         name: 'My 2nd report',
         ts: '1 month ago'
     }];
+});
+
+app.directive('datatable', function () {
+	return {
+		restrict: 'A,E',
+		scope: {
+			rows: '='
+		},
+		link: function (scope, element, attrs, controller) {
+			scope.$watch('rows', function () {
+				if (scope.rows) {
+					element.DataTable({
+					    data: scope.rows,
+					    columns: [{ data: 'firstName' }, { data: 'lastName' }, { data: 'birthDate', defaultContent: '' }]
+					}); 
+				}
+			});		
+		}
+	}
 });
