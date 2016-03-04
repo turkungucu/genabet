@@ -1,0 +1,53 @@
+<div class="card-box">
+	<h4 class="m-t-0 header-title">
+		<b>Create a new sample for patient {{patient.firstName}} {{patient.lastName}}</b>
+	</h4>
+</div>
+<ul class="nav nav-tabs navtab-custom nav-justified">
+	<li ng-class="step === 1 ? 'active' : ''">
+		<a data-toggle="tab" aria-expanded="true" ng-click="step = 1"> 
+			<span class="visible-xs"><i class="fa fa-home"></i></span> 
+			<span class="hidden-xs">Enter details</span>
+		</a>
+	</li>
+	<li ng-class="step === 2 ? 'active' : ''">
+		<a data-toggle="tab" aria-expanded="false" ng-click="step = 2"> 
+			<span class="visible-xs"><i class="fa fa-user"></i></span> 
+			<span class="hidden-xs">Upload files</span>
+		</a>
+	</li>
+</ul>
+<div class="tab-content">
+	<div class="tab-pane" ng-class="step === 1 ? 'active' : ''" id="details">
+		<form class="form-horizontal" role="form" ng-submit="saveSample()" data-parsley-validate>
+			<div class="form-group">
+				<label for="first-name" class="col-sm-2 control-label">Sample name</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="first-name" ng-model="sample.name" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="last-name" class="col-sm-2 control-label">Details</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="last-name" ng-model="sample.details">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-sm-offset-4 col-sm-8">
+					<a href="#/patients" role="button" class="btn btn-default waves-effect waves-light m-l-5">Cancel</a>
+					<button type="submit" class="btn btn-primary waves-effect waves-light">Next</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="tab-pane" ng-class="step === 2 ? 'active' : ''" id="fupload">
+		<div class="row">
+            <div class="dropzone" dropzone></div>
+        </div>
+        <br/>
+        <div class="row text-center" >
+        	<button class="btn btn-primary waves-effect waves-light btn-lg m-b-5">Submit for processing</button>
+        </div>
+	</div>
+</div>
