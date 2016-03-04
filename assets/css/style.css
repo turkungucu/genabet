@@ -82,7 +82,7 @@ h1,h2,h3,h4,h5,h6 {
   margin: 12px 0px 25px;
   padding: 0;
   height: 0;
-  border-top: 2px solid #7266ba;
+  border-top: 2px solid #3bafda;
 }
 .title {
   font-weight: 300;
@@ -166,8 +166,8 @@ h1,h2,h3,h4,h5,h6 {
   border-color: #C2CED4 !important;
 }
 .btn-primary {
-  background-color: #7266ba !important;
-  border: 1px solid #7266ba !important;
+  background-color: #3bafda !important;
+  border: 1px solid #3bafda !important;
 }
 .btn-primary:hover,
 .btn-primary:focus,
@@ -360,7 +360,7 @@ h1,h2,h3,h4,h5,h6 {
 
 /* -- Topbar -- */
 .tagline {
-  background: #7266ba;
+  background: #3bafda;
   font-size: 13px;
   color: #EEF2F5;
 }
@@ -490,7 +490,7 @@ h1,h2,h3,h4,h5,h6 {
   margin-bottom: 20px;
   display: block;
   line-height: 36px;
-  color: #7266ba;
+  color: #3bafda;
 }
 .service-item .service-detail p {
   color: #9aa7af;
@@ -526,7 +526,7 @@ h1,h2,h3,h4,h5,h6 {
   color: #ffffff;
 }
 .fun-facts .facts i {
-  color: #7266ba;
+  color: #3bafda;
   font-size: 36px;
 }
 
@@ -595,7 +595,7 @@ h1,h2,h3,h4,h5,h6 {
   height: 120px;
   width: 120px;
   margin: 0px auto;
-  color: #7266ba;
+  color: #3bafda;
   background: rgba(59, 175, 218, 0.3);
   border-radius: 50%;
   border: 12px solid #fafafa;
@@ -647,7 +647,7 @@ h1,h2,h3,h4,h5,h6 {
   width: 100px;
   display: block;
   background: #79A70A;
-  background: linear-gradient(#7266ba 0%, #7266ba 100%);
+  background: linear-gradient(#3BAFDA 0%, #3bafda 100%);
   box shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
   position: absolute;
   top: 19px; left: -21px;
@@ -656,19 +656,19 @@ h1,h2,h3,h4,h5,h6 {
   content: "";
   position: absolute; left: 0px; top: 100%;
   z-index: -1;
-  border-left: 3px solid #7266ba;
+  border-left: 3px solid #3bafda;
   border-right: 3px solid transparent;
   border-bottom: 3px solid transparent;
-  border-top: 3px solid #7266ba;
+  border-top: 3px solid #3bafda;
 }
 .ribbon span::after {
   content: "";
   position: absolute; right: 0px; top: 100%;
   z-index: -1;
   border-left: 3px solid transparent;
-  border-right: 3px solid #7266ba;
+  border-right: 3px solid #3bafda;
   border-bottom: 3px solid transparent;
-  border-top: 3px solid #7266ba;
+  border-top: 3px solid #3bafda;
 }
 
 
