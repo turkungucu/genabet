@@ -41,15 +41,15 @@ app.service('Patients', ['fbRef', '$q', function(fbRef, $q) {
 }]);
 
 app.factory('SampleCrudProvider', ['fbRef', '$q', function(fbRef, $q) {
-	return {
-		get: function(patientId) {
-			return new FirebaseCrud(fbRef.child('/patients/' + patientId + '/samples'), $q);
-		}
-	};  
+    return {
+        get: function(patientId) {
+            return new FirebaseCrud(fbRef.child('/patients/' + patientId + '/samples'), $q);
+        }
+    };
 }]);
 
 app.controller('PatientListCtrl', function($scope, $location, Patients) {
-	Patients.list(function() {
+    Patients.list(function() {
         $scope.loading = true;
     }).then(function(patients) {
         $scope.patients = patients;
@@ -72,7 +72,7 @@ app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients
         }
         Patients.save(patient).then($location.path('/patients'));
     }
-    
+
     $scope.removePatient = function() {
         var ok = confirm('Are you sure to remove this patient?');
         if (ok) {
@@ -106,34 +106,34 @@ app.controller('ReportsCtrl', function($scope) {
 app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef, Patients, SampleCrudProvider) {
     var patientId = $routeParams.pid;
     if (patientId) {
-    	Patients.get(patientId).then(function(patient) {
+        Patients.get(patientId).then(function(patient) {
             $scope.patient = patient;
         });
     }
-    
+
     $scope.step = 1;
     $scope.saveSample = function() {
-    	var sample = {
-    		name: this.sample.name,
-    		details: this.sample.details
-    	};
-    	var pid = $scope.patient.id;
-    	SampleCrudProvider.get(pid).save(sample).then(function(result) {
-    		$scope.step = 2;
-    		$scope.$apply();
-    	});
+        var sample = {
+            name: this.sample.name,
+            details: this.sample.details
+        };
+        var pid = $scope.patient.id;
+        SampleCrudProvider.get(pid).save(sample).then(function(result) {
+            $scope.step = 2;
+            $scope.$apply();
+        });
     };
 });
 
 app.directive('dropzone', function() {
-	return {
-		restrict: 'A,E',
-		link: function(scope, element, attrs, controller) {
-			element.dropzone({ 
-				url: "/file/post",
-			});
-		}
-	};
+    return {
+        restrict: 'A,E',
+        link: function(scope, element, attrs, controller) {
+            element.dropzone({
+                url: "/file/post",
+            });
+        }
+    };
 })
 
 app.directive('datatable', function() {
@@ -148,11 +148,11 @@ app.directive('datatable', function() {
                     element.DataTable({
                         data: scope.rows,
                         columns: [{
-                        	data: 'id',
-                        	orderable: false,
-                        	render: function (data, type, row, meta) {
-                        		return '<a href="#/patients/' + data + '"><i class="fa fa-pencil-square-o"></i></a>';
-                        	}
+                            data: 'id',
+                            orderable: false,
+                            render: function(data, type, row, meta) {
+                                return '<a href="#/patients/' + data + '"><i class="fa fa-pencil-square-o"></i></a>';
+                            }
                         }, {
                             data: 'firstName',
                             defaultContent: ''
@@ -163,11 +163,11 @@ app.directive('datatable', function() {
                             data: 'birthDate',
                             defaultContent: ''
                         }, {
-                        	data: 'id',
-                        	orderable: false,
-                        	render: function (data, type, row, meta) {
-                        		return '<a href="#/patients/' + data + '/sample/new">Add sample</i></a>';
-                        	}
+                            data: 'id',
+                            orderable: false,
+                            render: function(data, type, row, meta) {
+                                return '<a href="#/patients/' + data + '/sample/new">Add sample</i></a>';
+                            }
                         }]
                     });
                 }
