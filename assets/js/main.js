@@ -110,7 +110,7 @@ app.directive('datatable', function() {
                         	data: 'id',
                         	orderable: false,
                         	render: function (data, type, row, meta) {
-                        		return '<a href="#/patients/' + data + '"><i class="fa fa-pencil-square-o"></i></a>';
+                        		return '<a href="#/patients/' + data + '"><i class="fa fa-pencil"></i></a>';
                         	}
                         }]
                     });
