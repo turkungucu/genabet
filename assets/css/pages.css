@@ -198,12 +198,12 @@ h3.timeline-title {
    Timeline-2
  =============*/
 .timeline-2 {
-  border-left: 2px solid #3bafda;
+  border-left: 2px solid #00b19d;
   position: relative;
 }
 .timeline-2 .time-item:after {
   background-color: #ffffff;
-  border-color: #3bafda;
+  border-color: #00b19d;
   border-radius: 10px;
   border-style: solid;
   border-width: 2px;
@@ -227,7 +227,7 @@ h3.timeline-title {
 }
 .time-item:after {
   background-color: #ffffff;
-  border-color: #3bafda;
+  border-color: #00b19d;
   border-radius: 10px;
   border-style: solid;
   border-width: 2px;
@@ -260,7 +260,7 @@ h3.timeline-title {
   line-height: 22px;
 }
 button.confirm {
-  background-color: #3bafda !important;
+  background-color: #00b19d !important;
   box-shadow: none !important;
 }
 /* =============
@@ -331,7 +331,7 @@ button.confirm {
   background-clip: padding-box;
 }
 .custom-dd .dd-list .dd-item .dd-handle:hover {
-  color: #3bafda;
+  color: #00b19d;
 }
 .custom-dd .dd-list .dd-item button {
   height: auto;
@@ -351,7 +351,7 @@ button.confirm {
   top: 7px;
 }
 .custom-dd-empty .dd-list .dd3-handle:hover {
-  color: #3bafda;
+  color: #00b19d;
 }
 .custom-dd-empty .dd-list .dd3-content {
   height: auto;
@@ -361,7 +361,7 @@ button.confirm {
   font-weight: 600;
 }
 .custom-dd-empty .dd-list .dd3-content:hover {
-  color: #3bafda;
+  color: #00b19d;
 }
 .custom-dd-empty .dd-list button {
   width: 26px;
@@ -384,7 +384,7 @@ button.confirm {
   color: #ffffff;
   font-size: 16px;
   line-height: 40px;
-  background: #3bafda;
+  background: #00b19d;
   border-radius: 4px;
   padding: 10px 20px;
 }
@@ -399,13 +399,13 @@ button.confirm {
   bottom: -15px;
   border-left: 16px solid transparent;
   border-right: 16px solid transparent;
-  border-top: 16px solid #3bafda;
+  border-top: 16px solid #00b19d;
 }
 .gmaps-overlay_arrow.below {
   top: -15px;
   border-left: 16px solid transparent;
   border-right: 16px solid transparent;
-  border-bottom: 16px solid #3bafda;
+  border-bottom: 16px solid #00b19d;
 }
 /* =============
    Email
@@ -470,7 +470,7 @@ button.confirm {
   border: 1px solid #e3e3e3;
 }
 .bootstrap-tagsinput .label-info {
-  background-color: #3bafda !important;
+  background-color: #00b19d !important;
   display: inline-block;
   padding: 5px;
 }
@@ -515,7 +515,7 @@ button.confirm {
 }
 .select2-results .select2-highlighted {
   color: #ffffff;
-  background-color: #3bafda;
+  background-color: #00b19d;
 }
 .select2-drop-active {
   border: 1px solid #e3e3e3 !important;
@@ -588,7 +588,7 @@ button.confirm {
 }
 .mce-reset .mce-textbox:focus {
   box-shadow: none;
-  border-color: #3bafda;
+  border-color: #00b19d;
 }
 .mce-reset .mce-checkbox .mce-ico {
   background-image: none;
@@ -643,7 +643,7 @@ button.confirm {
   background-image: none;
 }
 .mce-container .mce-primary {
-  background-color: #3bafda;
+  background-color: #00b19d;
   background-image: none;
   outline: 0;
   border: 0px;
@@ -723,7 +723,7 @@ button.confirm {
   background-image: none;
 }
 .mce-container.mce-menu .mce-menu-item .mce-ico {
-  color: #3bafda;
+  color: #00b19d;
   font-size: 14px;
 }
 .mce-container.mce-menu .mce-menu-item .mce-text {
@@ -741,7 +741,7 @@ button.confirm {
 .mce-container.mce-menu .mce-menu-item:hover,
 .mce-container.mce-menu .mce-menu-item:focus,
 .mce-container.mce-menu .mce-menu-item.mce-selected {
-  background-color: #3bafda;
+  background-color: #00b19d;
 }
 .mce-container.mce-menu .mce-menu-item:hover .mce-ico,
 .mce-container.mce-menu .mce-menu-item:focus .mce-ico,
@@ -785,7 +785,7 @@ button.confirm {
   color: #797979 !important;
 }
 .mce-menu-item-normal.mce-active {
-  background-color: #3bafda !important;
+  background-color: #00b19d !important;
 }
 .mce-menu-item-normal.mce-active .mce-text {
   color: #ffffff !important;
@@ -887,7 +887,7 @@ button.confirm {
 .ct-chart .ct-series.ct-series-a .ct-line,
 .ct-chart .ct-series.ct-series-a .ct-point,
 .ct-chart .ct-series.ct-series-a .ct-slice-donut {
-  stroke: #3bafda;
+  stroke: #00b19d;
 }
 .ct-chart .ct-series.ct-series-b .ct-bar,
 .ct-chart .ct-series.ct-series-b .ct-line,
@@ -899,7 +899,7 @@ button.confirm {
 .ct-chart .ct-series.ct-series-c .ct-line,
 .ct-chart .ct-series.ct-series-c .ct-point,
 .ct-chart .ct-series.ct-series-c .ct-slice-donut {
-  stroke: #00b19d;
+  stroke: #3bafda;
 }
 .ct-chart .ct-series.ct-series-d .ct-bar,
 .ct-chart .ct-series.ct-series-d .ct-line,
@@ -927,7 +927,7 @@ button.confirm {
 }
 .ct-series-a .ct-area,
 .ct-series-a .ct-slice-pie {
-  fill: #3bafda;
+  fill: #00b19d;
 }
 .ct-series-b .ct-area,
 .ct-series-b .ct-slice-pie {
@@ -935,7 +935,7 @@ button.confirm {
 }
 .ct-series-c .ct-area,
 .ct-series-c .ct-slice-pie {
-  fill: #00b19d;
+  fill: #3bafda;
 }
 .ct-series-d .ct-area,
 .ct-series-d .ct-slice-pie {
@@ -1015,11 +1015,11 @@ button.confirm {
   transition: all 0.3s ease-out;
 }
 .portfolioFilter a:hover {
-  background-color: #3bafda;
+  background-color: #00b19d;
   color: #ffffff;
 }
 .portfolioFilter a.current {
-  background-color: #3bafda;
+  background-color: #00b19d;
   color: #ffffff;
 }
 .thumb {
@@ -1049,7 +1049,7 @@ button.confirm {
 .gal-detail .ga-border {
   height: 3px;
   width: 40px;
-  background-color: #3bafda;
+  background-color: #00b19d;
   margin: 10px auto;
 }
 /* ===========
@@ -1086,7 +1086,7 @@ button.confirm {
 }
 .logo-lg {
   font-size: 28px !important;
-  color: #3bafda !important;
+  color: #00b19d !important;
   font-weight: 700;
   letter-spacing: .02em;
   line-height: 70px;
