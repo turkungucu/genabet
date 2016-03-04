@@ -22,16 +22,16 @@ File: Menu
   min-height: 62px;
 }
 #topnav .has-submenu.active a {
-  color: #3bafda;
+  color: #00b19d;
 }
 #topnav .has-submenu.active a i {
-  color: #3bafda;
+  color: #00b19d;
 }
 #topnav .has-submenu.active .submenu li.active a {
-  color: #3bafda;
+  color: #00b19d;
 }
 #topnav .topbar-main {
-  background-color: #3bafda;
+  background-color: #00b19d;
 }
 #topnav .topbar-main .logo {
   color: #ffffff !important;
@@ -192,12 +192,12 @@ File: Menu
   overflow: hidden;
 }
 #topnav .noti-primary {
-  color: #3bafda;
-  border: 2px solid #3bafda;
-}
-#topnav .noti-success {
   color: #00b19d;
   border: 2px solid #00b19d;
+}
+#topnav .noti-success {
+  color: #3bafda;
+  border: 2px solid #3bafda;
 }
 #topnav .noti-info {
   color: #3ddcf7;
@@ -246,7 +246,7 @@ File: Menu
   background-color: transparent;
 }
 #topnav .navbar-toggle:focus span {
-  background-color: #3bafda;
+  background-color: #00b19d;
 }
 #topnav .navbar-toggle .lines {
   width: 25px;
@@ -303,22 +303,22 @@ File: Menu
   padding-right: 20px;
 }
 #topnav .navigation-menu > li > a:hover {
-  color: #3bafda;
+  color: #00b19d;
 }
 #topnav .navigation-menu > li > a:hover i {
-  color: #3bafda;
+  color: #00b19d;
 }
 #topnav .navigation-menu > li > a:focus {
-  color: #3bafda;
+  color: #00b19d;
 }
 #topnav .navigation-menu > li > a:focus i {
-  color: #3bafda;
+  color: #00b19d;
 }
 #topnav .navigation-menu > li > a:active {
-  color: #3bafda;
+  color: #00b19d;
 }
 #topnav .navigation-menu > li > a:active i {
-  color: #3bafda;
+  color: #00b19d;
 }
 #topnav .navigation-menu > li > a i {
   font-size: 18px;
@@ -353,10 +353,10 @@ File: Menu
     padding-left: 0px;
   }
   #topnav .navigation-menu > li:hover a {
-    color: #3bafda;
+    color: #00b19d;
   }
   #topnav .navigation-menu > li:hover a i {
-    color: #3bafda;
+    color: #00b19d;
   }
   #topnav .navigation-menu > li .submenu {
     position: absolute;
@@ -415,7 +415,7 @@ File: Menu
     color: #494e53;
   }
   #topnav .navigation-menu > li .submenu li a:hover {
-    color: #3bafda;
+    color: #00b19d;
   }
   #topnav .navigation-menu > li .submenu li span {
     display: block;
@@ -476,7 +476,7 @@ File: Menu
     color: #797979;
   }
   #topnav .navigation-menu > li .submenu li a:hover {
-    color: #3bafda;
+    color: #00b19d;
   }
   #topnav .navigation-menu > li .submenu li.has-submenu > a:after {
     content: "\e64b";
@@ -508,7 +508,7 @@ File: Menu
     color: #79818a;
   }
   #topnav .navigation-menu > li.has-submenu.open > a {
-    color: #3bafda;
+    color: #00b19d;
   }
   #topnav .navbar-header {
     float: left;
