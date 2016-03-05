@@ -19,8 +19,10 @@ function FirebaseCrud(baseRef, q) {
     this.save = function(obj) {
         var p = copyWoId(obj);
         if (obj.id) {
+        	p.dateUpdated = Firebase.ServerValue.TIMESTAMP;
             return idRef(obj.id).update(p);
         } else {
+        	p.dateCreated = Firebase.ServerValue.TIMESTAMP;
             return baseRef.push(p);
         }
     };

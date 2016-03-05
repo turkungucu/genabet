@@ -3,6 +3,10 @@
 		<b>Create a new sample for patient {{patient.firstName}} {{patient.lastName}}</b>
 	</h4>
 </div>
+<div class="alert alert-danger alert-dismissable" ng-show="errorMessage">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="errorMessage = null">×</button>
+	{{errorMessage}}
+</div>
 <ul class="nav nav-tabs navtab-custom nav-justified">
 	<li ng-class="step === 1 ? 'active' : ''">
 		<a data-toggle="tab" aria-expanded="true" ng-click="step = 1"> 
@@ -19,7 +23,7 @@
 </ul>
 <div class="tab-content">
 	<div class="tab-pane" ng-class="step === 1 ? 'active' : ''" id="details">
-		<form class="form-horizontal" role="form" ng-submit="saveSample()" data-parsley-validate>
+		<form class="form-horizontal" role="form" ng-submit="createSample()" data-parsley-validate>
 			<div class="form-group">
 				<label for="first-name" class="col-sm-2 control-label">Sample name</label>
 				<div class="col-sm-10">
@@ -47,7 +51,7 @@
         </div>
         <br/>
         <div class="row text-center" >
-        	<button class="btn btn-primary waves-effect waves-light btn-lg m-b-5">Submit for processing</button>
+        	<button class="btn btn-primary waves-effect waves-light btn-lg m-b-5" ng-click="submitForAnalysis()">Submit for analysis</button>
         </div>
 	</div>
 </div>
