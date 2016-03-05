@@ -9,7 +9,9 @@
 				    <p class="text-muted m-b-30 font-13">
 				        Patient {{patient.firstName}} {{patient.lastName}}
 				    </p>
-
+					<div class="alert alert-danger" ng-show="errorMessage">
+		    			{{errorMessage}}
+           			</div>
 				    <form role="form" ng-submit="saveSample()" data-parsley-validate>
 				        <div class="form-group">
 				        	<label for="sampleName">Sample name</label>

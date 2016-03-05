@@ -174,4 +174,9 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
         	});
         }
     };
+    
+    $scope.analyzeSample = function() {
+    	$scope.sample.status = 'PROCESSING';
+    	Samples.save($scope.sample).then($location.path('/samples'));
+    }
 });
