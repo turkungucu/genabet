@@ -54,19 +54,20 @@ app.service('Samples', ['fbRef', '$q', 'Patients', function(fbRef, $q, Patients)
         },
         // Save the samples separately
         // Add their id,name pairs to the patient for fast lookup later
-        save: function(sample, patient) {
+        saveUnderPatient: function(sample, patient) {
             var response = s.save(sample);
             var sampleId = response.key();
-            return response.then(function() {
-                if (!patient.samples) {
-                    patient.samples = [];
-                }
-                patient.samples.push({
-                    id: sampleId,
-                    name: sample.name
-                });
-                return Patients.save(patient);
+            response.then(function() {
+	            if (!patient.samples) {
+	                patient.samples = [];
+	            }
+	            patient.samples.push({
+	                id: sampleId,
+	                name: sample.name
+	            });
+	            Patients.save(patient);
             });
+            return response;
         },
         remove: function(id) {
             return s.remove(id);
@@ -132,23 +133,37 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
             $scope.patient = patient;
         });
     }
-    var sampleId = $routeParams.sid;
-    if (sampleId) {
-        Samples.get(sampleId).then(function(sample) {
-            $scope.sample = sample;
-        });
-    }
 
     $scope.step = 1;
-    $scope.saveSample = function() {
-        var sample = {
-            name: this.sample.name,
-            details: this.sample.details,
-            status: 'CREATED'
-        };
-        Samples.save(sample, $scope.patient).then(function(result) {
-            $scope.step = 2;
-            $scope.$apply();
-        });
+    $scope.createSample = function() {
+    	$scope.errorMessage = '';
+    	
+    	// Check to see if there is another sample with this name under this patient
+    	var existingSamples = $scope.patient.samples;
+    	var sampleName = this.sample.name;
+    	var sampleExists = existingSamples && existingSamples.some(function (s) {
+    		return s.name === sampleName;
+    	});
+    	
+    	if (sampleExists) {
+    		$scope.errorMessage = 'Sample with name ' + sampleName + ' already exists for this patient';
+    	} else {
+    		var sample = {
+	            name: sampleName,
+	            details: this.sample.details,
+	            status: 'CREATED'
+	        };	        
+	        
+	        Samples.saveUnderPatient(sample, $scope.patient).then(function(result) {
+	        	$scope.sample.id = result.key();
+	            $scope.step = 2;
+	            $scope.$apply();	            
+	        });
+    	}
+    };
+    
+    $scope.submitForAnalysis = function() {
+    	$scope.sample.status = 'PROCESSING';
+    	Samples.save($scope.sample).then($location.path('/samples'));
     };
 });
