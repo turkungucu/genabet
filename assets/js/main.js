@@ -169,6 +169,7 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
             Samples.save(sample).then($location.path('/samples'));
         } else {
         	checkExistingSample(sampleName, function () {
+        		sample.patientId = patientId;
         		sample.status = 'CREATED';
             	Samples.saveUnderPatient(sample, $scope.patient).then($location.path('/samples'));
         	});

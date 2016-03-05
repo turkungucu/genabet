@@ -67,7 +67,10 @@ c.directive('sampleTable', function() {
                         data: scope.rows,
                         columns: [{
                             data: 'name',
-                            defaultContent: ''
+                            defaultContent: '',
+                            render: function(data, type, row, meta) {
+                            	return '<a href="#/patients/' + row.patientId + '/samples/' + row.id + '">' + data + '</i></a>'; 
+                            }
                         }, {
                             data: 'details',
                             defaultContent: ''
@@ -83,6 +86,9 @@ c.directive('sampleTable', function() {
                                     return data;
                                 }
                             }
+                        }, {
+                            data: 'dateCreated',
+                            defaultContent: ''
                         }, {
                             data: 'id',
                             orderable: false,
