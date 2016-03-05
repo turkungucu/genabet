@@ -134,13 +134,15 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
         });
     }
 
-    $scope.step = 1;
-    $scope.createSample = function() {
-        $scope.errorMessage = '';
-
-        // Check to see if there is another sample with this name under this patient
-        var existingSamples = $scope.patient.samples;
-        var sampleName = this.sample.name;
+    var sampleId = $routeParams.sid;
+    if (sampleId) {
+    	Samples.get(sampleId).then(function(sample) {
+    		$scope.sample = sample;
+    	});
+    }
+    
+    function checkExistingSample(sampleName, successFn) {
+    	var existingSamples = $scope.patient.samples;
         var sampleExists = existingSamples && existingSamples.some(function(s) {
             return s.name === sampleName;
         });
@@ -148,22 +150,28 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
         if (sampleExists) {
             $scope.errorMessage = 'Sample with name ' + sampleName + ' already exists for this patient';
         } else {
-            var sample = {
-                name: sampleName,
-                details: this.sample.details,
-                status: 'CREATED'
-            };
-
-            Samples.saveUnderPatient(sample, $scope.patient).then(function(result) {
-                $scope.sample.id = result.key();
-                $scope.step = 2;
-                $scope.$apply();
-            });
+        	successFn(); 
         }
-    };
+    }
+    
+    $scope.saveSample = function(){
+        $scope.errorMessage = '';
 
-    $scope.submitForAnalysis = function() {
-        $scope.sample.status = 'PROCESSING';
-        Samples.save($scope.sample).then($location.path('/samples'));
+        var sampleName = this.sample.name;
+        var sample = {
+            name: sampleName,
+            details: this.sample.details
+        };
+
+        if ($scope.sample.id) {
+            sample.id = $scope.sample.id;
+            // TODO: Check for existing samples
+            Samples.save(sample).then($location.path('/samples'));
+        } else {
+        	checkExistingSample(sampleName, function () {
+        		sample.status = 'CREATED';
+            	Samples.saveUnderPatient(sample, $scope.patient).then($location.path('/samples'));
+        	});
+        }
     };
 });
