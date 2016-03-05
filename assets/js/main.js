@@ -1,4 +1,4 @@
-var app = angular.module('main', ['ngRoute']);
+var app = angular.module('main', ['ngRoute', 'components']);
 
 app.config(function($routeProvider) {
     $routeProvider.when('/', {
@@ -13,18 +13,18 @@ app.config(function($routeProvider) {
     }).when('/patients/:id', {
         controller: 'PatientCtrl',
         templateUrl: 'patient.html'
-    }).when('/patients/:pid/sample/new', {
+    }).when('/patients/:pid/samples/new', {
         controller: 'SampleCtrl',
         templateUrl: 'sample.html'
-    }).when('/patients/:pid/sample/:sid', {
+    }).when('/patients/:pid/samples/:sid', {
         controller: 'SampleCtrl',
         templateUrl: 'sample.html'
     }).when('/patients/:pid/samples', {
         controller: 'SampleListCtrl',
         templateUrl: 'sampleList.html'
-    }).when('/reports', {
-        controller: 'ReportsCtrl',
-        templateUrl: 'reports.html'
+    }).when('/samples', {
+        controller: 'SampleListCtrl',
+        templateUrl: 'sampleList.html'
     }).otherwise({
         redirectTo: '/'
     });
@@ -40,10 +40,36 @@ app.service('Patients', ['fbRef', '$q', function(fbRef, $q) {
     return new FirebaseCrud(fbRef.child('/patients'), $q);
 }]);
 
-app.factory('SampleCrudProvider', ['fbRef', '$q', function(fbRef, $q) {
+app.service('Samples', ['fbRef', '$q', 'Patients', function(fbRef, $q, Patients) {
+    var s = new FirebaseCrud(fbRef.child('/samples'), $q);
     return {
-        get: function(patientId) {
-            return new FirebaseCrud(fbRef.child('/patients/' + patientId + '/samples'), $q);
+        list: function() {
+            return s.list();
+        },
+        get: function(id) {
+            return s.get(id);
+        },
+        save: function(sample) {
+            return s.save(sample);
+        },
+        // Save the samples separately
+        // Add their id,name pairs to the patient for fast lookup later
+        save: function(sample, patient) {
+            var response = s.save(sample);
+            var sampleId = response.key();
+            return response.then(function() {
+                if (!patient.samples) {
+                    patient.samples = [];
+                }
+                patient.samples.push({
+                    id: sampleId,
+                    name: sample.name
+                });
+                return Patients.save(patient);
+            });
+        },
+        remove: function(id) {
+            return s.remove(id);
         }
     };
 }]);
@@ -61,12 +87,10 @@ app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients
     $scope.savePatient = function() {
         var patient = {
             firstName: this.patient.firstName,
-            lastName: this.patient.lastName
+            lastName: this.patient.lastName,
+            birthDate: this.patient.birthDate,
+            diagnosis: this.patient.diagnosis
         };
-        var bd = this.patient.birthDate;
-        if (bd) {
-            patient.birthDate = bd;
-        }
         if ($scope.patient) {
             patient.id = $scope.patient.id;
         }
@@ -92,22 +116,26 @@ app.controller('HomeCtrl', function($scope) {
 
 });
 
-app.controller('ReportsCtrl', function($scope) {
-    // TODO: Implement
-    $scope.reports = [{
-        name: 'My first report',
-        ts: '2 days ago'
-    }, {
-        name: 'My 2nd report',
-        ts: '1 month ago'
-    }];
+app.controller('SampleListCtrl', function($scope, $location, Samples) {
+    Samples.list(function() {
+        $scope.loading = true;
+    }).then(function(samples) {
+        $scope.samples = samples;
+        $scope.loading = false;
+    });
 });
 
-app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef, Patients, SampleCrudProvider) {
+app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef, Patients, Samples) {
     var patientId = $routeParams.pid;
     if (patientId) {
         Patients.get(patientId).then(function(patient) {
             $scope.patient = patient;
+        });
+    }
+    var sampleId = $routeParams.sid;
+    if (sampleId) {
+        Samples.get(sampleId).then(function(sample) {
+            $scope.sample = sample;
         });
     }
 
@@ -115,63 +143,12 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
     $scope.saveSample = function() {
         var sample = {
             name: this.sample.name,
-            details: this.sample.details
+            details: this.sample.details,
+            status: 'CREATED'
         };
-        var pid = $scope.patient.id;
-        SampleCrudProvider.get(pid).save(sample).then(function(result) {
+        Samples.save(sample, $scope.patient).then(function(result) {
             $scope.step = 2;
             $scope.$apply();
         });
-    };
-});
-
-app.directive('dropzone', function() {
-    return {
-        restrict: 'A,E',
-        link: function(scope, element, attrs, controller) {
-            element.dropzone({
-                url: "/file/post",
-            });
-        }
-    };
-})
-
-app.directive('datatable', function() {
-    return {
-        restrict: 'A,E',
-        scope: {
-            rows: '='
-        },
-        link: function(scope, element, attrs, controller) {
-            scope.$watch('rows', function() {
-                if (scope.rows) {
-                    element.DataTable({
-                        data: scope.rows,
-                        columns: [{
-                            data: 'id',
-                            orderable: false,
-                            render: function(data, type, row, meta) {
-                                return '<a href="#/patients/' + data + '"><i class="fa fa-pencil-square-o"></i></a>';
-                            }
-                        }, {
-                            data: 'firstName',
-                            defaultContent: ''
-                        }, {
-                            data: 'lastName',
-                            defaultContent: ''
-                        }, {
-                            data: 'birthDate',
-                            defaultContent: ''
-                        }, {
-                            data: 'id',
-                            orderable: false,
-                            render: function(data, type, row, meta) {
-                                return '<a href="#/patients/' + data + '/sample/new">Add sample</i></a>';
-                            }
-                        }]
-                    });
-                }
-            });
-        }
     };
 });
