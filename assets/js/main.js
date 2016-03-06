@@ -25,6 +25,9 @@ app.config(function($routeProvider) {
     }).when('/samples', {
         controller: 'SampleListCtrl',
         templateUrl: 'sampleList.html'
+    }).when('/samples/:id/results', {
+        controller: 'ResultsCtrl',
+        templateUrl: 'results.html'
     }).otherwise({
         redirectTo: '/'
     });
@@ -55,6 +58,7 @@ app.service('Samples', ['fbRef', '$q', 'Patients', function(fbRef, $q, Patients)
         // Save the samples separately
         // Add their id,name pairs to the patient for fast lookup later
         saveUnderPatient: function(sample, patient) {
+        	sample.patientId = patient.id;
             var response = s.save(sample);
             var sampleId = response.key();
             response.then(function() {
@@ -169,7 +173,6 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
             Samples.save(sample).then($location.path('/samples'));
         } else {
         	checkExistingSample(sampleName, function () {
-        		sample.patientId = patientId;
         		sample.status = 'CREATED';
             	Samples.saveUnderPatient(sample, $scope.patient).then($location.path('/samples'));
         	});
@@ -179,5 +182,101 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
     $scope.analyzeSample = function() {
     	$scope.sample.status = 'PROCESSING';
     	Samples.save($scope.sample).then($location.path('/samples'));
+    }
+});
+
+app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRef, Patients, Samples) {
+	var mutations = [{
+		gene: 'KRAS',
+		rep: 'c.34G>C',
+		type: 'Substitution - Missense',
+		aaChange: 'G12R',
+		effect: 'Codon change',
+		tissues: ['Pancreas', 'Large intestine', 'Lung', 'Billary tract', 'Ovary'],
+		quality: 100,
+		readDepth: 1000,
+		alleleFrequency: 0.001,
+		cosmicId: 518
+	}, {
+		gene: 'EGFR',
+		rep: 'c.2369C>T',
+		type: 'Substitution - Missense',
+		aaChange: 'T790M',
+		effect: 'Codon change',
+		tissues: ['Lung', 'Breast', 'Upper aerodigestive tract', 'Billary tract', 'Central nervous system'],
+		quality: 250,
+		readDepth: 1052,
+		alleleFrequency: 0.001,
+		cosmicId: 6240
+	}, {
+		gene: 'EGFR',
+		rep: 'c.2290_2291ins12',
+		type: 'Insertion',
+		aaChange: 'p.A763_Y764insFQEA',
+		effect: 'Codon insertion',
+		tissues: ['Lung'],
+		quality: 230,
+		readDepth: 1122,
+		alleleFrequency: 0.002,
+		cosmicId: 26720
+	}, {
+		gene: 'EGFR',
+		rep: 'c.1138delT',
+		type: 'Deletion',
+		aaChange: 'p.S380fs*16',
+		effect: 'Frame shift',
+		tissues: ['Ovary'],
+		quality: 230,
+		readDepth: 1310,
+		alleleFrequency: 0.003,
+		cosmicId: 111519
+	}, {
+		gene: 'BRAF',
+		rep: 'c.1415A>G',
+		type: 'Substitution - Missense',
+		aaChange: 'Y472C',
+		effect: 'Codon change',
+		tissues: ['Lung', 'Large intestine'],
+		quality: 220,
+		readDepth: 1295,
+		alleleFrequency: 0.001,
+		cosmicId: 1133046
+	}, {
+		gene: 'PTEN',
+		rep: 'c.697C>T',
+		type: 'Substitution - Missense',
+		aaChange: 'R233*',
+		effect: 'Stop gained',
+		tissues: ['Endometrium', 'Central nervous system', 'Large intestine', 'Cervix', 'Lung'],
+		quality: 423,
+		readDepth: 1125,
+		alleleFrequency: 0.001,
+		cosmicId: 5154
+	}, {
+		gene: 'FGFR1',
+		rep: 'c.578_579insA',
+		type: 'Insertion',
+		aaChange: 'N193fs*8',
+		effect: 'Frame shift',
+		tissues: ['Large intestine'],
+		quality: 122,
+		readDepth: 1069,
+		alleleFrequency: 0.001,
+		cosmicId: 1456945
+	}];
+	
+	function simulateResults() {
+		
+	}
+	
+    var sampleId = $routeParams.id;
+    if (sampleId) {
+    	Samples.get(sampleId).then(function(sample) {
+    		$scope.sample = sample;
+    		// Simulate sample results. TODO: Remove when backend is implemented
+    		if (!$scope.sample.results) {
+    			
+    		}
+    	});
     }
 });
