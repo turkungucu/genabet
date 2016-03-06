@@ -1,3 +1,101 @@
-<div class="card-box">
-	<h3>Welcome to Genabet Genomics portal</h3>
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="page-title">Welcome to Genabet Genomics Portal</h4>
+    </div>
 </div>
+
+<div class="row">
+    <div class="col-sm-6 col-lg-3">
+        <div class="card-box bg-purple">
+            <div class="row">
+                <div class="col-xs-4 text-center text-white fa-4x" style="opacity: 0.2">
+                    <i class="ti-user"></i>
+                </div>
+                <div class="col-xs-8 text-right">
+                    <h3 class="text-white counter">262</h3>
+    				<p class="text-white text-nowrap">Total Patients</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+    	<div class="card-box bg-success">
+            <div class="row">
+                <div class="col-xs-4 text-center text-white fa-4x" style="opacity: 0.2">
+                    <i class="ti-layers-alt"></i>
+                </div>
+                <div class="col-xs-8 text-right">
+                    <h3 class="text-white counter">685</h3>
+            		<p class="text-white text-nowrap">Total Samples</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+    	<div class="card-box bg-warning">
+            <div class="row">
+                <div class="col-xs-4 text-center text-white fa-4x" style="opacity: 0.2">
+                    <i class="ti-pulse"></i>
+                </div>
+                <div class="col-xs-8 text-right">
+                    <h3 class="text-white">80</h3>
+            		<p class="text-white text-nowrap">Running Samples</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+    	<div class="card-box bg-inverse">
+            <div class="row">
+                <div class="col-xs-4 text-center text-white fa-4x" style="opacity: 0.2">
+                    <i class="ti-timer"></i>
+                </div>
+                <div class="col-xs-8 text-right">
+                    <h3 class="text-white counter">62</h3>
+            		<p class="text-white text-nowrap">Pending Samples</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card-box">
+            <h4 class="m-t-0 m-b-20 header-title"><b>Line Chart</b></h4>
+            <div id="sparkline1"></div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card-box">
+            <h4 class="m-t-0 m-b-20 header-title"><b>Bar Chart</b></h4>
+            <div id="sparkline2" class="text-center"></div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card-box">
+            <h4 class="m-t-0 m-b-20 header-title"><b>Pie Chart</b></h4>
+            <div id="sparkline3" class="text-center"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <h4 class="m-t-0 m-b-20 header-title"><b>Line Chart</b></h4>
+
+            <div class="line-chart">
+                <svg style="height:400px;width:100%"></svg>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/lib/jquery.dashboard.js"></script>
+<script src="assets/js/lib/jquery.nvd3.init.js"></script>
