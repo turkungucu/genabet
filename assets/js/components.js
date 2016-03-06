@@ -23,12 +23,6 @@ c.directive('patientTable', function() {
                     element.DataTable({
                         data: scope.rows,
                         columns: [{
-                            data: 'id',
-                            orderable: false,
-                            render: function(data, type, row, meta) {
-                                return '<a href="#/patients/' + data + '"><i class="fa fa-pencil-square-o"></i></a>';
-                            }
-                        }, {
                             data: 'firstName',
                             defaultContent: ''
                         }, {
@@ -49,7 +43,9 @@ c.directive('patientTable', function() {
                             data: 'id',
                             orderable: false,
                             render: function(data, type, row, meta) {
-                                return '<a href="#/patients/' + data + '/samples/new">Add sample</i></a>';
+                                addLink = '<a href="#/patients/' + data + '/samples/new" class="btn btn-purple waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-plus"></i> Sample</i></a>';
+                                editLink = '<a href="#/patients/' + data + '" class="btn btn-primary waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-pencil"></i> Edit</i></a>';
+                                return addLink + '&nbsp;' + editLink;
                             }
                         }]
                     });
