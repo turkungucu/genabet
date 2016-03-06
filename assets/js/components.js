@@ -43,7 +43,7 @@ c.directive('patientTable', function() {
                         }, {
                             data: 'dateCreated',
                             render: function(data, type, row, meta) {
-                            	return data ? moment(data).fromNow() : '';
+                                return data ? moment(data).fromNow() : '';
                             }
                         }, {
                             data: 'id',
@@ -70,12 +70,14 @@ c.directive('sampleTable', function() {
                 if (scope.rows) {
                     element.DataTable({
                         data: scope.rows,
-                        order: [[ 0, "desc" ]],
+                        order: [
+                            [0, "desc"]
+                        ],
                         columns: [{
                             data: 'name',
                             defaultContent: '',
                             render: function(data, type, row, meta) {
-                            	return '<a href="#/patients/' + row.patientId + '/samples/' + row.id + '">' + data + '</i></a>'; 
+                                return '<a href="#/patients/' + row.patientId + '/samples/' + row.id + '">' + data + '</i></a>';
                             }
                         }, {
                             data: 'details',
@@ -93,8 +95,9 @@ c.directive('sampleTable', function() {
                                 }
                             }
                         }, {
-                            data: 'dateCreated',render: function(data, type, row, meta) {
-                            	return data ? moment(data).fromNow() : '';
+                            data: 'dateCreated',
+                            render: function(data, type, row, meta) {
+                                return data ? moment(data).fromNow() : '';
                             }
                         }, {
                             data: 'id',
@@ -103,6 +106,73 @@ c.directive('sampleTable', function() {
                                 var status = row.status;
                                 if ('READY' === status) {
                                     return '<a href="#/samples/' + data + '/results">Results</i></a>';
+                                } else {
+                                    return '';
+                                }
+                            }
+                        }]
+                    });
+                }
+            });
+        }
+    };
+});
+
+c.directive('mutationsTable', function() {
+    return {
+        restrict: 'A,E',
+        scope: {
+            rows: '='
+        },
+        link: function(scope, element, attrs, controller) {
+            scope.$watch('rows', function() {
+                if (scope.rows) {
+                    element.DataTable({
+                        data: scope.rows,
+                        order: [
+                            [0, "asc"]
+                        ],
+                        columns: [{
+                            data: 'gene',
+                            defaultContent: ''
+                        }, {
+                            data: 'cdsChange',
+                            defaultContent: ''
+                        }, {
+                            data: 'aaChange',
+                            defaultContent: ''
+                        }, {
+                            data: 'type',
+                            defaultContent: ''
+                        }, {
+                            data: 'effect',
+                            defaultContent: ''
+                        }, {
+                            data: 'tissues',
+                            render: function(data, type, row, meta) {
+                                var result = '';
+                                if (data) {
+                                    data.forEach(function(tissue) {
+                                        result += '- ' + tissue + '<br/>';
+                                    });
+                                }
+                                return result;
+                            }
+                        }, {
+                            data: 'quality',
+                            defaultContent: ''
+                        }, {
+                            data: 'readDepth',
+                            defaultContent: ''
+                        }, {
+                            data: 'alleleFrequency',
+                            defaultContent: ''
+                        }, {
+                            data: 'cosmicId',
+                            orderable: false,
+                            render: function(data, type, row, meta) {
+                                if (data) {
+                                    return '<a href="http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=' + data + '" target="_blank">' + data + '</a>';
                                 } else {
                                     return '';
                                 }
