@@ -41,6 +41,11 @@ c.directive('patientTable', function() {
                             data: 'diagnosis',
                             defaultContent: ''
                         }, {
+                            data: 'dateCreated',
+                            render: function(data, type, row, meta) {
+                            	return data ? moment(data).fromNow() : '';
+                            }
+                        }, {
                             data: 'id',
                             orderable: false,
                             render: function(data, type, row, meta) {
@@ -65,6 +70,7 @@ c.directive('sampleTable', function() {
                 if (scope.rows) {
                     element.DataTable({
                         data: scope.rows,
+                        order: [[ 0, "desc" ]],
                         columns: [{
                             data: 'name',
                             defaultContent: '',
@@ -87,8 +93,9 @@ c.directive('sampleTable', function() {
                                 }
                             }
                         }, {
-                            data: 'dateCreated',
-                            defaultContent: ''
+                            data: 'dateCreated',render: function(data, type, row, meta) {
+                            	return data ? moment(data).fromNow() : '';
+                            }
                         }, {
                             data: 'id',
                             orderable: false,
