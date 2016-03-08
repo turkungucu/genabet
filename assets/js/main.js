@@ -113,12 +113,14 @@ app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients
     if (patientId) {
         Patients.get(patientId).then(function(patient) {
             $scope.patient = patient;
-            $scope.samples = patient.samples.reduce(function(res, sample) {
-            	Samples.get(sample.id).then(function(sample) {
-            		res.push(sample);
-            	});
-            	return res;
-            }, []);
+            if (patient.samples) {
+	            $scope.samples = patient.samples.reduce(function(res, sample) {
+	            	Samples.get(sample.id).then(function(sample) {
+	            		res.push(sample);
+	            	});
+	            	return res;
+	            }, []); 
+            }
         });
     }
 });
