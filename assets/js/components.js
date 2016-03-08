@@ -84,10 +84,21 @@ c.directive('sampleTable', function() {
                             orderable: false,
                             render: function(data, type, row, meta) {
                                 var status = row.status;
+                                var labelClass = 'label-primary';
+                                var spinner = '<i class="fa fa-circle-o-notch fa-spin"></i> ';
+
+                                if ('CREATED' === status) {
+                                    labelClass = 'label-warning'; 
+                                } else if ('READY' === status) {
+                                    labelClass = 'label-success'; 
+                                } else if ('PROCESSING' == status) {
+                                    labelClass = 'label-purple'; 
+                                }
+
                                 if ('PROCESSING' === status) {
-                                    return '<i class="fa fa-circle-o-notch fa-spin fa-2x"></i> ' + data;
+                                    return  spinner + '<span class="label ' + labelClass + '">' + data + '</span>';
                                 } else {
-                                    return data;
+                                    return '<span class="label ' + labelClass +'">' + data + '</span>';
                                 }
                             }
                         }, {
@@ -101,7 +112,8 @@ c.directive('sampleTable', function() {
                             render: function(data, type, row, meta) {
                                 var status = row.status;
                                 if ('READY' === status) {
-                                    return '<a href="#/samples/' + data + '/results">Results</i></a>';
+                                    resultsLink = '<a href="#/samples/' + data + '/results" class="btn btn-primary waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-search"></i> Results</i></a>';                                   
+                                    return resultsLink;
                                 } else {
                                     return '';
                                 }

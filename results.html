@@ -1,11 +1,12 @@
-<div class="card-box">
-	<h4 class="m-t-0 header-title">
-		Results for {{sample.name}}
-	</h4>
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="page-title">Results for {{sample.name}}</h4>
+    </div>
 </div>
+
 <div class="row">
 	<div class="col-sm-6">
-		<div class="panel panel-default">
+		<div class="panel panel-border panel-success">
             <div class="panel-heading">
                 <h3 class="panel-title">Mutations Grouped By Gene</h3>
             </div>
@@ -16,7 +17,7 @@
 	</div>
 	
 	<div class="col-sm-6">
-		<div class="panel panel-default">
+		<div class="panel panel-border panel-success">
             <div class="panel-heading">
                 <h3 class="panel-title">Mutations Grouped By Tissue</h3>
             </div>
@@ -26,24 +27,34 @@
         </div>
 	</div>
 </div>
-<div class="card-box">
-	<h5 class="m-t-0 header-title">
-		Mutations
-	</h5>
-	<table mutations-table rows="sample.mutations" class="table table-striped">
-		<thead>
-			<tr>
-				<th>Gene</th>
-				<th>CDS change</th>
-				<th>AA change</th>
-				<th>Type</th>
-				<th>Effect</th>
-				<th>Associated tissues</th>
-				<th>Quality</th>
-				<th>Read Depth</th>
-				<th>Allele Freq</th>
-				<th>COSMIC link</th>
-			</tr>
-		</thead>
-	</table>
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="card-box table-responsive">
+			<h4 class="m-t-0 header-title">
+				Mutations
+			</h4>
+
+			<p class="text-muted font-13 m-b-30">
+                This analysis shows mutations
+            </p>
+
+			<table mutations-table rows="sample.mutations" class="table table-striped">
+				<thead>
+					<tr>
+						<th>Gene</th>
+						<th>CDS change</th>
+						<th>AA change</th>
+						<th>Type</th>
+						<th>Effect</th>
+						<th>Associated tissues</th>
+						<th>Quality</th>
+						<th>Read Depth</th>
+						<th>Allele Freq</th>
+						<th>COSMIC link</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
 </div>
