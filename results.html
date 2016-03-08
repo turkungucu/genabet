@@ -2,6 +2,34 @@
 	<h4 class="m-t-0 header-title">
 		Results for {{sample.name}}
 	</h4>
+</div>
+<div class="row">
+	<div class="col-sm-6">
+		<div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Mutations Grouped By Gene</h3>
+            </div>
+            <div class="panel-body">
+            	<div donut-chart data="geneTotalsData"></div>
+            </div>
+        </div>
+	</div>
+	
+	<div class="col-sm-6">
+		<div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Mutations Grouped By Tissue</h3>
+            </div>
+            <div class="panel-body">
+            	<div donut-chart data="tissueTotalsData"></div>
+            </div>
+        </div>
+	</div>
+</div>
+<div class="card-box">
+	<h5 class="m-t-0 header-title">
+		Mutations
+	</h5>
 	<table mutations-table rows="sample.mutations" class="table table-striped">
 		<thead>
 			<tr>

@@ -180,3 +180,24 @@ c.directive('mutationsTable', function() {
         }
     };
 });
+
+c.directive('donutChart', function() {
+    return {
+        restrict: 'A,E',
+        scope: {
+            data: '='
+        },
+        link: function(scope, element, attrs, controller) {
+            scope.$watch('data', function() {
+                if (scope.data) {
+                	Morris.Donut({
+            		  element: element,
+            		  data: scope.data,
+            		  colors: ["#00b19d", "#ededed", "#64b5f6", "#F0F8FF", "#FAEBD7", "#8A2BE2", 
+            		           "#DC143C", "#FF8C00", "#FF1493", "#FFB6C1", "#F5FFFA", "#000080"]
+            		});
+                }
+            });
+        }
+    };
+});

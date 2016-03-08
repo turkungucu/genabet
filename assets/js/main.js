@@ -88,7 +88,7 @@ app.controller('PatientListCtrl', function($scope, $location, Patients) {
     });
 });
 
-app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients) {
+app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients, Samples) {
     $scope.savePatient = function() {
         var patient = {
             firstName: this.patient.firstName,
@@ -113,6 +113,12 @@ app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients
     if (patientId) {
         Patients.get(patientId).then(function(patient) {
             $scope.patient = patient;
+            $scope.samples = patient.samples.reduce(function(res, sample) {
+            	Samples.get(sample.id).then(function(sample) {
+            		res.push(sample);
+            	});
+            	return res;
+            }, []);
         });
     }
 });
@@ -310,6 +316,42 @@ app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRe
         }
         return randMut;
     }
+    
+    function aggregateMutationsByGene(mutations) {
+    	return mutations.reduce(function(res, mut) {
+    		var gene = mut.gene;
+    		if (gene in res) {
+    			res[gene]++;
+    		} else {
+    			res[gene] = 1;
+    		}
+    		return res;
+    	}, {});
+    }
+    
+    function aggregateMutationsByTissue(mutations) {
+    	return mutations.reduce(function(res, mut) {
+    		var tissues = mut.tissues;
+    		tissues.forEach(function(tissue) {
+    			if (tissue in res) {
+        			res[tissue]++;
+        		} else {
+        			res[tissue] = 1;
+        		}
+    		});
+    		return res;
+    	}, {});
+    }
+    
+    function toPieChartData(aggregates) {
+    	return Object.keys(aggregates).reduce(function(res, key) {
+    		res.push({
+    			label: key,
+    			value: aggregates[key]
+    		});
+    		return res;
+    	}, []);
+    }
 
     var sampleId = $routeParams.id;
     if (sampleId) {
@@ -320,6 +362,10 @@ app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRe
                 $scope.sample.mutations = simulateMutations();
                 Samples.save($scope.sample);
             }
+            var geneTotals = aggregateMutationsByGene($scope.sample.mutations);
+            $scope.geneTotalsData = toPieChartData(geneTotals);
+            var tissueTotals = aggregateMutationsByTissue($scope.sample.mutations);
+            $scope.tissueTotalsData = toPieChartData(tissueTotals);
         });
     }
 });

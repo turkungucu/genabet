@@ -48,10 +48,11 @@
 		    </p>
 
 			<div class="list-group">
-                <a class="list-group-item" href="#/patients/{{patient.id}}/samples/{{s.id}}" ng-repeat="s in patient.samples">
-                	<span class="badge badge-purple">CREATED</span>
-                    {{s.name}}
-                </a>
+                <div class="list-group-item" ng-repeat="s in samples">
+                	<span class="badge badge-purple">{{s.status}}</span>
+                    <a href="#/patients/{{patient.id}}/samples/{{s.id}}">{{s.name}}</a> 
+                    <span ng-if="'READY' === s.status"><a href="#/samples/{{s.id}}/results">| Results</a></span>
+                </div>
             </div>
 		</div>
 	</div>
