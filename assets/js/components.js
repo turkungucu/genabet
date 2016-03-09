@@ -1,5 +1,14 @@
 var c = angular.module('components', []);
 
+c.directive('datePicker', function() {
+	return {
+        restrict: 'A,E',
+        link: function(scope, element, attrs, controller) {
+            element.datepicker();
+        }
+    }; 
+});
+
 c.directive('dropzone', function() {
     return {
         restrict: 'A,E',
