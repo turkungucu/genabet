@@ -96,7 +96,7 @@ c.directive('sampleTable', function() {
                                 }
 
                                 if ('PROCESSING' === status) {
-                                    return  spinner + '<span class="label ' + labelClass + '">' + data + '</span>';
+                                    return '<span class="label ' + labelClass + '">' + spinner + '&nbsp;' + data + '</span>';
                                 } else {
                                     return '<span class="label ' + labelClass +'">' + data + '</span>';
                                 }
