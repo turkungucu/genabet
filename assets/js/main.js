@@ -46,8 +46,8 @@ app.service('Patients', ['fbRef', '$q', function(fbRef, $q) {
 app.service('Samples', ['fbRef', '$q', 'Patients', function(fbRef, $q, Patients) {
     var s = new FirebaseCrud(fbRef.child('/samples'), $q);
     return {
-        list: function() {
-            return s.list();
+        list: function(beforeFn) {
+            return s.list(beforeFn);
         },
         get: function(id) {
             return s.get(id);
