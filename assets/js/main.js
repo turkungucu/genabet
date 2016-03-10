@@ -140,6 +140,7 @@ app.controller('PatientListCtrl', function($scope, $location, Patients) {
 });
 
 app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients, Samples) {
+    $scope.step = 1;
     var patientId = $routeParams.id;
     if (patientId) {
         Patients.get(patientId).then(function(patient) {

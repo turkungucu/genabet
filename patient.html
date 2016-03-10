@@ -1,79 +1,300 @@
 <div class="row">
     <div class="col-sm-12">
-        <h4 class="page-title">{{patient ? 'Edit' : 'New'}} Patient</h4>
+        <h4 class="page-title">Patient Overview</h4>
     </div>
 </div>
 
 <div class="row">
-	<div class="col-sm-6">
-		<div class="card-box">
-			<h4 class="m-t-0 header-title">
-		    	Patient Details
-		    </h4>
-		    <table class="table table table-hover">
-		    	<tr><td><strong>First name</strong></td><td>{{patient.firstName}}</td></tr>
-		    	<tr><td><strong>Last name</strong></td><td>{{patient.lastName}}</td></tr>
-		    	<tr><td><strong>Birth date</strong></td><td>{{patient.birthDate}}</td></tr>
-		    	<tr><td><strong>Diagnosis</strong></td><td>{{patient.diagnosis}}</td></tr>
-			</table>
-		</div>
-	</div>
+    <div class="col-lg-8">
+        <ul class="nav nav-tabs navtab-custom">
+            <li ng-class="step === 1 ? 'active' : ''">
+                <a aria-expanded="true" data-toggle="tab" ng-click="step = 1">
+                    <span class="visible-xs"><i class="fa fa-home"></i></span>
+                    <span class="hidden-xs">Samples</span>
+                </a>
+            </li>
+            <li ng-class="step === 2 ? 'active' : ''">
+                <a aria-expanded="false" data-toggle="tab" ng-click="step = 2">
+                    <span class="visible-xs"><i class="fa fa-user"></i></span>
+                    <span class="hidden-xs">Treatments</span>
+                </a>
+            </li>
+            <li ng-class="step === 3 ? 'active' : ''">
+                <a aria-expanded="false" data-toggle="tab" ng-click="step = 3">
+                    <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
+                    <span class="hidden-xs">History</span>
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="samples" class="tab-pane" ng-class="step === 1 ? 'active' : ''">
+                <p class="text-muted m-b-30 font-13">
+				    Click on the sample name to edit. You can also view results for samples in <code>READY</code> state.
+				</p>
 
-	<div class="col-sm-6" ng-show="patient">
-		<div class="card-box">
-			<h4 class="m-t-0 header-title">
-		    	Samples
-		    </h4>
-		    <p class="text-muted m-b-30 font-13">
-		        Click on the sample name to edit. You can also view results for samples in <code>READY</code> state.
-		    </p>
+				<table class="table table-hover" ng-if="samples && samples.length > 0">
+					<tr><th>Sample</th><th>Status</th><th>Results</th></tr>
+					<tr ng-repeat="s in samples">
+						<td>
+							<a href="#/patients/{{patient.id}}/samples/{{s.id}}">{{s.name}}</a>
+						</td>
+						<td>
+							<span ng-if="'READY' === s.status">
+					    		<span class="label label-success">{{s.status}}</span>
+					    	</span>
 
-			<div class="list-group">
-                <div class="list-group-item" ng-repeat="s in samples">
-                	<span ng-if="'READY' === s.status">
-                		<span class="label label-success">{{s.status}}</span>
-                	</span>
+					    	<span ng-if="'CREATED' === s.status">
+					    		<span class="label label-warning">{{s.status}}</span>
+					    	</span>
 
-                	<span ng-if="'CREATED' === s.status">
-                		<span class="label label-warning">{{s.status}}</span>
-                	</span>
-
-                	<span ng-if="'PROCESSING' === s.status">
-                		<span class="label label-purple">{{s.status}}</span>
-                	</span>
-
-                	<div style="float: right;">
-                    	<a href="#/patients/{{patient.id}}/samples/{{s.id}}">{{s.name}}</a> 
-                    	<span ng-if="'READY' === s.status"><a href="#/samples/{{s.id}}/results">| Results</a></span>
-                    </div>
-                </div>
+					    	<span ng-if="'PROCESSING' === s.status">
+					    		<span class="label label-purple">{{s.status}}</span>
+					    	</span>
+						</td>
+						<td>
+							<span ng-if="'READY' === s.status">
+								<a href="#/samples/{{s.id}}/results" class="btn btn-primary waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-search"></i> Results
+								</a>
+							</span>
+						</td>
+					</tr>
+				</table>
             </div>
-		</div>
-	</div>
-</div>
+            <div id="treatments" class="tab-pane" ng-class="step === 2 ? 'active' : ''">
+                <p class="text-muted m-b-30 font-13">
+			        Click on the treatment to edit
+			    </p>
+				<table class="table table-hover" ng-if="patient.treatments && patient.treatments.length > 0">
+					<tr><th>Drug</th><th>Start Date</th><th></th></tr>
+					<tr ng-repeat="t in patient.treatments">
+						<td>{{t.drug}}</td>
+						<td>{{t.startDate}}</td>
+						<td>
+							<a href="#/patients/{{patient.id}}/treatments/{{t.id}}" 
+	                	   		class="btn btn-primary waves-effect waves-light btn-xs m-b-5">
+	                	   		<i class="glyphicon glyphicon-pencil"></i> Edit
+	                		</a>
+						</td>
+					</tr>
+				</table>
+            </div>
+            <div id="history" class="tab-pane" ng-class="step === 3 ? 'active' : ''">
+                <div class="timeline">
+		            <article class="timeline-item alt">
+		                <div class="text-right">
+		                    <div class="time-show first">
+		                        <a class="btn btn-primary w-lg" href="#">Today</a>
+		                    </div>
+		                </div>
+		            </article>
+		            <article class="timeline-item alt">
+		                <div class="timeline-desk">
+		                    <div class="panel">
+		                        <div class="panel-body">
+		                            <span class="arrow-alt"></span>
+		                            <span class="timeline-icon"></span>
+		                            <h4 class="text-danger">1 hour ago</h4>
+		                            <p class="timeline-date text-muted"><small>08:25 am</small></p>
+		                            <p>Dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? </p>
+		                        </div>
+		                    </div>
+		                </div>
+		            </article>
+		            <article class="timeline-item ">
+		                <div class="timeline-desk">
+		                    <div class="panel">
+		                        <div class="panel-body">
+		                            <span class="arrow"></span>
+		                            <span class="timeline-icon"></span>
+		                            <h4 class="text-success">2 hours ago</h4>
+		                            <p class="timeline-date text-muted"><small>08:25 am</small></p>
+		                            <p>consectetur adipisicing elit. Iusto, optio, dolorum <a href="#">John deon</a> provident rerum aut hic quasi placeat iure tempora laudantium </p>
 
-<div class="row">
-	<div class="col-sm-6" ng-show="patient">
-		<div class="card-box">
-			<h4 class="m-t-0 header-title">
-		    	Treatments
-		    </h4>
-		    <p class="text-muted m-b-30 font-13">
-		        Click on the treatment to edit
-		    </p>
-			<table class="table table table-hover" ng-if="patient.treatments && patient.treatments.length > 0">
-				<tr><th>Drug</th><th>Start Date</th><th></th></tr>
-				<tr ng-repeat="t in patient.treatments">
-					<td>{{t.drug}}</td>
-					<td>{{t.startDate}}</td>
-					<td>
-						<a href="#/patients/{{patient.id}}/treatments/{{t.id}}" 
-                	   		class="btn btn-primary waves-effect waves-light btn-xs m-b-5">
-                	   		<i class="glyphicon glyphicon-pencil"></i> Edit
-                		</a>
-					</td>
-				</tr>
-			</table>
-		</div>
-	</div>
+		                        </div>
+		                    </div>
+		                </div>
+		            </article>
+		            <article class="timeline-item alt">
+		                <div class="timeline-desk">
+		                    <div class="panel">
+		                        <div class="panel-body">
+		                            <span class="arrow-alt"></span>
+		                            <span class="timeline-icon"></span>
+		                            <h4 class="text-primary">10 hours ago</h4>
+		                            <p class="timeline-date text-muted"><small>08:25 am</small></p>
+		                            <p>3 new photo Uploaded on facebook fan page</p>
+		                            <div class="album">
+		                                <a href="#">
+		                                    <img src="assets/images/small/img1.jpg" alt="">
+		                                </a>
+		                                <a href="#">
+		                                    <img src="assets/images/small/img2.jpg" alt="">
+		                                </a>
+		                                <a href="#">
+		                                    <img src="assets/images/small/img3.jpg" alt="">
+		                                </a>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		            </article>
+		            <article class="timeline-item">
+		                <div class="timeline-desk">
+		                    <div class="panel">
+		                        <div class="panel-body">
+		                            <span class="arrow"></span>
+		                            <span class="timeline-icon"></span>
+		                            <h4 class="text-purple">14 hours ago</h4>
+		                            <p class="timeline-date text-muted"><small>08:25 am</small></p>
+		                            <p>Outdoor visit at California State Route 85 with John Boltana &amp;
+		                                Harry Piterson regarding to setup a new show room.</p>
+		                        </div>
+		                    </div>
+		                </div>
+		            </article>
+		            <article class="timeline-item alt">
+		                <div class="timeline-desk">
+		                    <div class="panel">
+		                        <div class="panel-body">
+		                            <span class="arrow-alt"></span>
+		                            <span class="timeline-icon"></span>
+		                            <h4 class="text-muted">19 hours ago</h4>
+		                            <p class="timeline-date text-muted"><small>08:25 am</small></p>
+		                            <p>Jonatha Smith added new milestone <span><a href="#">Pathek</a></span>
+		                                Lorem ipsum dolor sit amet consiquest dio</p>
+		                        </div>
+		                    </div>
+		                </div>
+		            </article>
+
+		            <article class="timeline-item alt">
+		                <div class="text-right">
+		                    <div class="time-show">
+		                        <a class="btn btn-primary w-lg" href="#">Yesterday</a>
+		                    </div>
+		                </div>
+		            </article>
+		            <article class="timeline-item">
+		                <div class="timeline-desk">
+		                    <div class="panel">
+		                        <div class="panel-body">
+		                            <span class="arrow"></span>
+		                            <span class="timeline-icon"></span>
+		                            <h4 class="text-warning">07 January 2016</h4>
+		                            <p class="timeline-date text-muted"><small>08:25 am</small></p>
+		                            <p>Montly Regular Medical check up at Greenland Hospital by the
+		                                doctor <span><a href="#"> Johm meon </a></span>
+		                            </p>
+
+		                        </div>
+		                    </div>
+		                </div>
+		            </article>
+		            <article class="timeline-item alt">
+		                <div class="timeline-desk">
+		                    <div class="panel">
+		                        <div class="panel-body">
+		                            <span class="arrow-alt"></span>
+		                            <span class="timeline-icon"></span>
+		                            <h4 class="text-primary">07 January 2016</h4>
+		                            <p class="timeline-date text-muted"><small>08:25 am</small></p>
+		                            <p>Download the new updates of Ubold admin dashboard</p>
+		                        </div>
+		                    </div>
+		                </div>
+		            </article>
+
+		            <article class="timeline-item">
+		                <div class="timeline-desk">
+		                    <div class="panel">
+		                        <div class="panel-body">
+		                            <span class="arrow"></span>
+		                            <span class="timeline-icon"></span>
+		                            <h4 class="text-success">07 January 2016</h4>
+		                            <p class="timeline-date text-muted"><small>08:25 am</small></p>
+		                            <p>Jonatha Smith added new milestone <span><a href="#" class="blue">crishtian</a></span>
+		                                Lorem ipsum dolor sit amet consiquest dio</p>
+		                        </div>
+		                    </div>
+		                </div>
+		            </article>
+		            <article class="timeline-item alt">
+		                <div class="text-right">
+		                    <div class="time-show">
+		                        <a class="btn btn-primary w-lg" href="#">Last Month</a>
+		                    </div>
+		                </div>
+		            </article>
+
+		            <article class="timeline-item alt">
+		                <div class="timeline-desk">
+		                    <div class="panel">
+		                        <div class="panel-body">
+		                            <span class="arrow-alt"></span>
+		                            <span class="timeline-icon"></span>
+		                            <h4 class="text-muted">31 December 2015</h4>
+		                            <p class="timeline-date text-muted"><small>08:25 am</small></p>
+		                            <p>Download the new updates of Ubold admin dashboard</p>
+		                        </div>
+		                    </div>
+		                </div>
+		            </article>
+
+		            <article class="timeline-item">
+		                <div class="timeline-desk">
+		                    <div class="panel">
+		                        <div class="panel-body">
+		                            <span class="arrow"></span>
+		                            <span class="timeline-icon"></span>
+		                            <h4 class="text-danger">16 Decembar 2015</h4>
+		                            <p class="timeline-date text-muted"><small>08:25 am</small></p>
+		                            <p>Jonatha Smith added new milestone <span><a href="#">prank</a></span>
+		                                Lorem ipsum dolor sit amet consiquest dio</p>
+		                        </div>
+		                    </div>
+		                </div>
+		            </article>
+		        </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+    	<div class="panel panel-border panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">Patient Details</h3>
+            </div>
+            <div class="panel-body">
+                <form role="form" class="form-horizontal">
+		            <div class="form-group">
+		                <label class="col-sm-3 control-label">First Name</label>
+		                <div class="col-sm-9">
+		                  <p class="form-control-static">{{patient.firstName}}</p>
+		                </div>
+		            </div>
+
+		            <div class="form-group">
+		                <label class="col-sm-3 control-label">Last Name</label>
+		                <div class="col-sm-9">
+		                  <p class="form-control-static">{{patient.lastName}}</p>
+		                </div>
+		            </div>
+
+		            <div class="form-group">
+		                <label class="col-sm-3 control-label">Birthday</label>
+		                <div class="col-sm-9">
+		                  <p class="form-control-static">{{patient.birthDate}}</p>
+		                </div>
+		            </div>
+
+		            <div class="form-group">
+		                <label class="col-sm-3 control-label">Diagnosis</label>
+		                <div class="col-sm-9">
+		                  <p class="form-control-static">{{patient.diagnosis}}</p>
+		                </div>
+		            </div>
+		        </form>
+            </div>
+        </div>
+    </div>
 </div>
