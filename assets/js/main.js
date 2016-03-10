@@ -49,14 +49,14 @@ app.service('fbRef', function(fbUrl) {
 });
 
 app.service('Patients', ['fbRef', '$q', function(fbRef, $q) {
-	var pref = new FirebaseCrud(fbRef.child('/patients'), $q);
-	var tref = function(patientId) {
-		return fbRef.child('/patients/' + patientId + '/treatments');
-	}
-	var tridef = function(patientId, treatmentId) {
-		return fbRef.child('/patients/' + patientId + '/treatments/' + treatmentId);
-	}
-	
+    var pref = new FirebaseCrud(fbRef.child('/patients'), $q);
+    var tref = function(patientId) {
+        return fbRef.child('/patients/' + patientId + '/treatments');
+    }
+    var tridef = function(patientId, treatmentId) {
+        return fbRef.child('/patients/' + patientId + '/treatments/' + treatmentId);
+    }
+
     return {
         list: function(beforeFn) {
             return pref.list(beforeFn);
@@ -71,25 +71,25 @@ app.service('Patients', ['fbRef', '$q', function(fbRef, $q) {
             return pref.remove(id);
         },
         addTreatment: function(patientId, treatment) {
-        	return tref(patientId).push(treatment);
+            return tref(patientId).push(treatment);
         },
         updateTreatment: function(patientId, treatment) {
-        	return tridef(patientId, treatment.id).set(treatment);
+            return tridef(patientId, treatment.id).set(treatment);
         },
         removeTreatment: function(patientId, treatmentId) {
-        	return tridef(patientId, treatmentId).remove();
+            return tridef(patientId, treatmentId).remove();
         },
         getTreatments: function(patient) {
-        	if (patient.treatments) {
-	        	return Object.keys(patient.treatments).reduce(function(res, treatmentId) {
-	        		var treatment = patient.treatments[treatmentId];
-	        		treatment.id = treatmentId;
-	        		res.push(treatment);
-	        		return res;
-	        	}, []); 
-        	} else {
-        		return [];
-        	}
+            if (patient.treatments) {
+                return Object.keys(patient.treatments).reduce(function(res, treatmentId) {
+                    var treatment = patient.treatments[treatmentId];
+                    treatment.id = treatmentId;
+                    res.push(treatment);
+                    return res;
+                }, []);
+            } else {
+                return [];
+            }
         }
     };
 }]);
@@ -145,12 +145,12 @@ app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients
         Patients.get(patientId).then(function(patient) {
             $scope.patient = patient;
             if (patient.samples) {
-	            $scope.samples = patient.samples.reduce(function(res, sample) {
-	            	Samples.get(sample.id).then(function(sample) {
-	            		res.push(sample);
-	            	});
-	            	return res;
-	            }, []); 
+                $scope.samples = patient.samples.reduce(function(res, sample) {
+                    Samples.get(sample.id).then(function(sample) {
+                        res.push(sample);
+                    });
+                    return res;
+                }, []);
             }
             $scope.patient.treatments = Patients.getTreatments(patient);
         });
@@ -158,7 +158,7 @@ app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients
 });
 
 app.controller('SavePatientCtrl', function($scope, $location, $routeParams, Patients) {
-	var patientId = $routeParams.id;
+    var patientId = $routeParams.id;
     if (patientId) {
         Patients.get(patientId).then(function(patient) {
             $scope.patient = patient;
@@ -176,7 +176,7 @@ app.controller('SavePatientCtrl', function($scope, $location, $routeParams, Pati
         }
         Patients.save(patient).then($location.path('/patients'));
     }
-    
+
     $scope.removePatient = function() {
         var ok = confirm('Are you sure to remove this patient?');
         if (ok) {
@@ -260,10 +260,10 @@ app.controller('TreatmentCtrl', function($scope, $routeParams, $location, $q, fb
         Patients.get(patientId).then(function(patient) {
             $scope.patient = patient;
             if (treatmentId) {
-	            var treatments = Patients.getTreatments(patient);
-	            $scope.treatment = treatments.find(function(t) {
-            		return t.id === treatmentId;
-            	});
+                var treatments = Patients.getTreatments(patient);
+                $scope.treatment = treatments.find(function(t) {
+                    return t.id === treatmentId;
+                });
             }
         });
     }
@@ -272,16 +272,16 @@ app.controller('TreatmentCtrl', function($scope, $routeParams, $location, $q, fb
         $scope.errorMessage = '';
 
         if ($scope.patient) {
-        	var treatment = {
-        		drug: this.treatment.drug,
-            	startDate: this.treatment.startDate
+            var treatment = {
+                drug: this.treatment.drug,
+                startDate: this.treatment.startDate
             };
-        	if ($scope.treatment.id) {
-        		treatment.id = $scope.treatment.id;
-        		Patients.updateTreatment($scope.patient.id, treatment).then($location.path('/patients'));
-        	} else {
-        		Patients.addTreatment($scope.patient.id, treatment).then($location.path('/patients'));
-        	}
+            if ($scope.treatment.id) {
+                treatment.id = $scope.treatment.id;
+                Patients.updateTreatment($scope.patient.id, treatment).then($location.path('/patients'));
+            } else {
+                Patients.addTreatment($scope.patient.id, treatment).then($location.path('/patients'));
+            }
         }
     };
 
@@ -418,41 +418,41 @@ app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRe
         }
         return randMut;
     }
-    
+
     function aggregateMutationsByGene(mutations) {
-    	return mutations.reduce(function(res, mut) {
-    		var gene = mut.gene;
-    		if (gene in res) {
-    			res[gene]++;
-    		} else {
-    			res[gene] = 1;
-    		}
-    		return res;
-    	}, {});
+        return mutations.reduce(function(res, mut) {
+            var gene = mut.gene;
+            if (gene in res) {
+                res[gene]++;
+            } else {
+                res[gene] = 1;
+            }
+            return res;
+        }, {});
     }
-    
+
     function aggregateMutationsByTissue(mutations) {
-    	return mutations.reduce(function(res, mut) {
-    		var tissues = mut.tissues;
-    		tissues.forEach(function(tissue) {
-    			if (tissue in res) {
-        			res[tissue]++;
-        		} else {
-        			res[tissue] = 1;
-        		}
-    		});
-    		return res;
-    	}, {});
+        return mutations.reduce(function(res, mut) {
+            var tissues = mut.tissues;
+            tissues.forEach(function(tissue) {
+                if (tissue in res) {
+                    res[tissue]++;
+                } else {
+                    res[tissue] = 1;
+                }
+            });
+            return res;
+        }, {});
     }
-    
+
     function toPieChartData(aggregates) {
-    	return Object.keys(aggregates).reduce(function(res, key) {
-    		res.push({
-    			label: key,
-    			value: aggregates[key]
-    		});
-    		return res;
-    	}, []);
+        return Object.keys(aggregates).reduce(function(res, key) {
+            res.push({
+                label: key,
+                value: aggregates[key]
+            });
+            return res;
+        }, []);
     }
 
     var sampleId = $routeParams.id;

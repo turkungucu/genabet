@@ -1,12 +1,12 @@
 var c = angular.module('components', []);
 
 c.directive('datePicker', function() {
-	return {
+    return {
         restrict: 'A,E',
         link: function(scope, element, attrs, controller) {
             element.datepicker();
         }
-    }; 
+    };
 });
 
 c.directive('dropzone', function() {
@@ -52,8 +52,8 @@ c.directive('patientTable', function() {
                             data: 'id',
                             orderable: false,
                             render: function(data, type, row, meta) {
-                            	var detailsLink = '<a href="#/patients/' + data + '" class="btn btn-info waves-effect waves-light btn-xs m-b-5">Details</a>';
-                            	var editLink = '<a href="#/patients/' + data + '/edit" class="btn btn-primary waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-pencil"></i> Edit</i></a>';
+                                var detailsLink = '<a href="#/patients/' + data + '" class="btn btn-info waves-effect waves-light btn-xs m-b-5">Details</a>';
+                                var editLink = '<a href="#/patients/' + data + '/edit" class="btn btn-primary waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-pencil"></i> Edit</i></a>';
                                 var addSampleLink = '<a href="#/patients/' + data + '/samples/new" class="btn btn-purple waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-plus"></i> Sample</i></a>';
                                 var addTreatmentLink = '<a href="#/patients/' + data + '/treatments/new" class="btn btn-warning waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-plus"></i> Treatment</i></a>';
                                 return detailsLink + '&nbsp;' + editLink + '&nbsp;' + addSampleLink + '&nbsp;' + addTreatmentLink;
@@ -99,17 +99,17 @@ c.directive('sampleTable', function() {
                                 var spinner = '<i class="fa fa-circle-o-notch fa-spin"></i> ';
 
                                 if ('CREATED' === status) {
-                                    labelClass = 'label-warning'; 
+                                    labelClass = 'label-warning';
                                 } else if ('READY' === status) {
-                                    labelClass = 'label-success'; 
+                                    labelClass = 'label-success';
                                 } else if ('PROCESSING' == status) {
-                                    labelClass = 'label-purple'; 
+                                    labelClass = 'label-purple';
                                 }
 
                                 if ('PROCESSING' === status) {
                                     return '<span class="label ' + labelClass + '">' + spinner + '&nbsp;' + data + '</span>';
                                 } else {
-                                    return '<span class="label ' + labelClass +'">' + data + '</span>';
+                                    return '<span class="label ' + labelClass + '">' + data + '</span>';
                                 }
                             }
                         }, {
@@ -123,7 +123,7 @@ c.directive('sampleTable', function() {
                             render: function(data, type, row, meta) {
                                 var status = row.status;
                                 if ('READY' === status) {
-                                    resultsLink = '<a href="#/samples/' + data + '/results" class="btn btn-primary waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-search"></i> Results</i></a>';                                   
+                                    resultsLink = '<a href="#/samples/' + data + '/results" class="btn btn-primary waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-search"></i> Results</i></a>';
                                     return resultsLink;
                                 } else {
                                     return '';
@@ -213,12 +213,13 @@ c.directive('donutChart', function() {
         link: function(scope, element, attrs, controller) {
             scope.$watch('data', function() {
                 if (scope.data) {
-                	Morris.Donut({
-            		  element: element,
-            		  data: scope.data,
-            		  colors: ["#00b19d", "#ededed", "#64b5f6", "#F0F8FF", "#FAEBD7", "#8A2BE2", 
-            		           "#DC143C", "#FF8C00", "#FF1493", "#FFB6C1", "#F5FFFA", "#000080"]
-            		});
+                    Morris.Donut({
+                        element: element,
+                        data: scope.data,
+                        colors: ["#00b19d", "#ededed", "#64b5f6", "#F0F8FF", "#FAEBD7", "#8A2BE2",
+                            "#DC143C", "#FF8C00", "#FF1493", "#FFB6C1", "#F5FFFA", "#000080"
+                        ]
+                    });
                 }
             });
         }
