@@ -52,9 +52,11 @@ c.directive('patientTable', function() {
                             data: 'id',
                             orderable: false,
                             render: function(data, type, row, meta) {
-                                addLink = '<a href="#/patients/' + data + '/samples/new" class="btn btn-purple waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-plus"></i> Sample</i></a>';
-                                editLink = '<a href="#/patients/' + data + '" class="btn btn-primary waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-pencil"></i> Edit</i></a>';
-                                return addLink + '&nbsp;' + editLink;
+                            	var detailsLink = '<a href="#/patients/' + data + '" class="btn btn-info waves-effect waves-light btn-xs m-b-5">Details</a>';
+                            	var editLink = '<a href="#/patients/' + data + '/edit" class="btn btn-primary waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-pencil"></i> Edit</i></a>';
+                                var addSampleLink = '<a href="#/patients/' + data + '/samples/new" class="btn btn-purple waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-plus"></i> Sample</i></a>';
+                                var addTreatmentLink = '<a href="#/patients/' + data + '/treatments/new" class="btn btn-warning waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-plus"></i> Treatment</i></a>';
+                                return detailsLink + '&nbsp;' + editLink + '&nbsp;' + addSampleLink + '&nbsp;' + addTreatmentLink;
                             }
                         }]
                     });

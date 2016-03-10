@@ -8,8 +8,11 @@ app.config(function($routeProvider) {
         controller: 'PatientListCtrl',
         templateUrl: 'patientList.html'
     }).when('/patients/new', {
-        controller: 'PatientCtrl',
-        templateUrl: 'patient.html'
+        controller: 'SavePatientCtrl',
+        templateUrl: 'savePatient.html'
+    }).when('/patients/:id/edit', {
+        controller: 'SavePatientCtrl',
+        templateUrl: 'savePatient.html'
     }).when('/patients/:id', {
         controller: 'PatientCtrl',
         templateUrl: 'patient.html'
@@ -22,6 +25,12 @@ app.config(function($routeProvider) {
     }).when('/patients/:pid/samples', {
         controller: 'SampleListCtrl',
         templateUrl: 'sampleList.html'
+    }).when('/patients/:pid/treatments/new', {
+        controller: 'TreatmentCtrl',
+        templateUrl: 'treatment.html'
+    }).when('/patients/:pid/treatments/:tid', {
+        controller: 'TreatmentCtrl',
+        templateUrl: 'treatment.html'
     }).when('/samples', {
         controller: 'SampleListCtrl',
         templateUrl: 'sampleList.html'
@@ -40,7 +49,49 @@ app.service('fbRef', function(fbUrl) {
 });
 
 app.service('Patients', ['fbRef', '$q', function(fbRef, $q) {
-    return new FirebaseCrud(fbRef.child('/patients'), $q);
+	var pref = new FirebaseCrud(fbRef.child('/patients'), $q);
+	var tref = function(patientId) {
+		return fbRef.child('/patients/' + patientId + '/treatments');
+	}
+	var tridef = function(patientId, treatmentId) {
+		return fbRef.child('/patients/' + patientId + '/treatments/' + treatmentId);
+	}
+	
+    return {
+        list: function(beforeFn) {
+            return pref.list(beforeFn);
+        },
+        get: function(id) {
+            return pref.get(id);
+        },
+        save: function(patient) {
+            return pref.save(patient);
+        },
+        remove: function(id) {
+            return pref.remove(id);
+        },
+        addTreatment: function(patientId, treatment) {
+        	return tref(patientId).push(treatment);
+        },
+        updateTreatment: function(patientId, treatment) {
+        	return tridef(patientId, treatment.id).set(treatment);
+        },
+        removeTreatment: function(patientId, treatmentId) {
+        	return tridef(patientId, treatmentId).remove();
+        },
+        getTreatments: function(patient) {
+        	if (patient.treatments) {
+	        	return Object.keys(patient.treatments).reduce(function(res, treatmentId) {
+	        		var treatment = patient.treatments[treatmentId];
+	        		treatment.id = treatmentId;
+	        		res.push(treatment);
+	        		return res;
+	        	}, []); 
+        	} else {
+        		return [];
+        	}
+        }
+    };
 }]);
 
 app.service('Samples', ['fbRef', '$q', 'Patients', function(fbRef, $q, Patients) {
@@ -89,26 +140,6 @@ app.controller('PatientListCtrl', function($scope, $location, Patients) {
 });
 
 app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients, Samples) {
-    $scope.savePatient = function() {
-        var patient = {
-            firstName: this.patient.firstName,
-            lastName: this.patient.lastName,
-            birthDate: this.patient.birthDate,
-            diagnosis: this.patient.diagnosis
-        };
-        if ($scope.patient) {
-            patient.id = $scope.patient.id;
-        }
-        Patients.save(patient).then($location.path('/patients'));
-    }
-
-    $scope.removePatient = function() {
-        var ok = confirm('Are you sure to remove this patient?');
-        if (ok) {
-            Patients.remove($scope.patient.id).then($location.path('/patients'));
-        }
-    };
-
     var patientId = $routeParams.id;
     if (patientId) {
         Patients.get(patientId).then(function(patient) {
@@ -121,8 +152,37 @@ app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients
 	            	return res;
 	            }, []); 
             }
+            $scope.patient.treatments = Patients.getTreatments(patient);
         });
     }
+});
+
+app.controller('SavePatientCtrl', function($scope, $location, $routeParams, Patients) {
+	var patientId = $routeParams.id;
+    if (patientId) {
+        Patients.get(patientId).then(function(patient) {
+            $scope.patient = patient;
+        });
+    }
+    $scope.savePatient = function() {
+        var patient = {
+            firstName: this.patient.firstName,
+            lastName: this.patient.lastName,
+            birthDate: this.patient.birthDate,
+            diagnosis: this.patient.diagnosis
+        };
+        if ($scope.patient) {
+            patient.id = $scope.patient.id;
+        }
+        Patients.save(patient).then($location.path('/patients'));
+    }
+    
+    $scope.removePatient = function() {
+        var ok = confirm('Are you sure to remove this patient?');
+        if (ok) {
+            Patients.remove($scope.patient.id).then($location.path('/patients'));
+        }
+    };
 });
 
 app.controller('HomeCtrl', function($scope) {
@@ -191,6 +251,46 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
         $scope.sample.status = 'PROCESSING';
         Samples.save($scope.sample).then($location.path('/samples'));
     }
+});
+
+app.controller('TreatmentCtrl', function($scope, $routeParams, $location, $q, fbRef, Patients) {
+    var patientId = $routeParams.pid;
+    var treatmentId = $routeParams.tid;
+    if (patientId) {
+        Patients.get(patientId).then(function(patient) {
+            $scope.patient = patient;
+            if (treatmentId) {
+	            var treatments = Patients.getTreatments(patient);
+	            $scope.treatment = treatments.find(function(t) {
+            		return t.id === treatmentId;
+            	});
+            }
+        });
+    }
+
+    $scope.saveTreatment = function() {
+        $scope.errorMessage = '';
+
+        if ($scope.patient) {
+        	var treatment = {
+        		drug: this.treatment.drug,
+            	startDate: this.treatment.startDate
+            };
+        	if ($scope.treatment.id) {
+        		treatment.id = $scope.treatment.id;
+        		Patients.updateTreatment($scope.patient.id, treatment).then($location.path('/patients'));
+        	} else {
+        		Patients.addTreatment($scope.patient.id, treatment).then($location.path('/patients'));
+        	}
+        }
+    };
+
+    $scope.removeTreatment = function(treatmentId) {
+        var ok = confirm('Are you sure to remove this treatment?');
+        if (ok) {
+            Patients.removeTreatment($scope.patient.id, treatmentId).then($location.path('/patients'));
+        }
+    };
 });
 
 app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRef, Patients, Samples) {
