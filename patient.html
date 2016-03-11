@@ -31,6 +31,9 @@
                 <p class="text-muted m-b-30 font-13">
 				    Click on the sample name to edit. You can also view results for samples in <code>READY</code> state.
 				</p>
+				<a href="#/patients/{{patient.id}}/samples/new" class="btn btn-primary btn-custom waves-effect waves-light m-b-5" role="button"> 
+					<i class="fa fa-plus m-r-5"></i> <span>Create new</span> 
+				</a>
 
 				<table class="table table-hover" ng-if="samples && samples.length > 0">
 					<thead>
@@ -65,9 +68,9 @@
 				</table>
             </div>
             <div id="treatments" class="tab-pane" ng-class="step === 2 ? 'active' : ''">
-                <p class="text-muted m-b-30 font-13">
-			        Click on the treatment to edit
-			    </p>
+                <a href="#/patients/{{patient.id}}/treatments/new" class="btn btn-primary btn-custom waves-effect waves-light m-b-5" role="button"> 
+					<i class="fa fa-plus m-r-5"></i> <span>Create new</span> 
+				</a>
 				<table class="table table-hover" ng-if="patient.treatments && patient.treatments.length > 0">
 					<thead>
 						<tr><th>Drug</th><th>Start Date</th><th></th></tr>

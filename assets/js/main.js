@@ -74,7 +74,9 @@ app.service('Patients', ['fbRef', '$q', function(fbRef, $q) {
             return tref(patientId).push(treatment);
         },
         updateTreatment: function(patientId, treatment) {
-            return tridef(patientId, treatment.id).set(treatment);
+        	var treatmentId = treatment.id;
+        	delete treatment.id;
+            return tridef(patientId, treatmentId).set(treatment);
         },
         removeTreatment: function(patientId, treatmentId) {
             return tridef(patientId, treatmentId).remove();
@@ -140,7 +142,8 @@ app.controller('PatientListCtrl', function($scope, $location, Patients) {
 });
 
 app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients, Samples) {
-    $scope.step = 1;
+	var step = $location.search()['step'];
+	$scope.step = step ? parseInt(step) : 1;
     var patientId = $routeParams.id;
     if (patientId) {
         Patients.get(patientId).then(function(patient) {
@@ -269,6 +272,7 @@ app.controller('TreatmentCtrl', function($scope, $routeParams, $location, $q, fb
         });
     }
 
+    // TODO: Don't allow future date for startDate
     $scope.saveTreatment = function() {
         $scope.errorMessage = '';
 
@@ -277,12 +281,14 @@ app.controller('TreatmentCtrl', function($scope, $routeParams, $location, $q, fb
                 drug: this.treatment.drug,
                 startDate: this.treatment.startDate
             };
+            var result;
             if ($scope.treatment.id) {
-                treatment.id = $scope.treatment.id;
-                Patients.updateTreatment($scope.patient.id, treatment).then($location.path('/patients'));
+            	treatment.id = $scope.treatment.id;
+                result = Patients.updateTreatment($scope.patient.id, treatment);
             } else {
-                Patients.addTreatment($scope.patient.id, treatment).then($location.path('/patients'));
+                result = Patients.addTreatment($scope.patient.id, treatment);
             }
+            result.then($location.path('/patients/' + $scope.patient.id).search('step', '2'));
         }
     };
 
