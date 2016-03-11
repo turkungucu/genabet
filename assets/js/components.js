@@ -52,10 +52,10 @@ c.directive('patientTable', function() {
                             data: 'id',
                             orderable: false,
                             render: function(data, type, row, meta) {
-                                var detailsLink = '<a href="#/patients/' + data + '" class="btn btn-info waves-effect waves-light btn-xs m-b-5">Details</a>';
-                                var editLink = '<a href="#/patients/' + data + '/edit" class="btn btn-primary waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-pencil"></i> Edit</i></a>';
-                                var addSampleLink = '<a href="#/patients/' + data + '/samples/new" class="btn btn-purple waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-plus"></i> Sample</i></a>';
-                                var addTreatmentLink = '<a href="#/patients/' + data + '/treatments/new" class="btn btn-warning waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-plus"></i> Treatment</i></a>';
+                                var detailsLink = '<a href="#/patients/' + data + '" class="action-icon-info"><i class="fa fa-search"></i></a>';
+                                var editLink = '<a href="#/patients/' + data + '/edit" class="action-icon-primary"><i class="fa fa-pencil"></i></a>';
+                                var addSampleLink = '<a href="#/patients/' + data + '/samples/new" class="action-icon-purple"><i class="fa fa-flask"></i></a>';
+                                var addTreatmentLink = '<a href="#/patients/' + data + '/treatments/new" class="action-icon-danger"><i class="fa fa-medkit"></i></a>';
                                 return detailsLink + '&nbsp;' + editLink + '&nbsp;' + addSampleLink + '&nbsp;' + addTreatmentLink;
                             }
                         }]

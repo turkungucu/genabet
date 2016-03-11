@@ -8046,3 +8046,48 @@ MIT License: https://github.com/driftyco/ionicons
 .ti-rss-alt:before {
   content: "\e75f";
 }
+
+
+table .fa {
+  padding-right: 10px;
+}
+
+.action-icon-primary {
+  color: #00b19d; /*green*/
+}
+
+/*a.action-icon-primary:hover,
+a.action-icon-primary:active,
+a.action-icon-primary:focus, {
+  color: #009886;
+}*/
+
+.action-icon-info {
+  color: #3ddcf7; /*info*/
+}
+
+/*a.action-icon-info:hover,
+a.action-icon-info:active,
+a.action-icon-info:focus, {
+  color: #25d8f6;
+}*/
+
+.action-icon-purple {
+  color: #7266ba; /*purple*/
+}
+
+/*a.action-icon-purple:hover,
+a.action-icon-purple:active,
+a.action-icon-purple:focus, {
+  color: #6254b2;
+}*/
+
+.action-icon-danger {
+  color: #ef5350;
+}
+
+/*a.action-icon-danger:hover,
+a.action-icon-danger:active,
+a.action-icon-danger:focus, {
+  color: #ed3c39;
+}*/
