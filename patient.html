@@ -73,12 +73,13 @@
 				</a>
 				<table class="table table-hover" ng-if="patient.treatments && patient.treatments.length > 0">
 					<thead>
-						<tr><th>Drug</th><th>Start Date</th><th></th></tr>
+						<tr><th>Drug</th><th>Start Date</th><th>Stop Date</th><th></th></tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="t in patient.treatments">
 							<td>{{t.drug}}</td>
 							<td>{{t.startDate}}</td>
+							<td>{{t.stopDate}}</td>
 							<td>
 								<a href="#/patients/{{patient.id}}/treatments/{{t.id}}" 
 		                	   		class="btn btn-primary waves-effect waves-light btn-xs m-b-5">

@@ -271,24 +271,50 @@ app.controller('TreatmentCtrl', function($scope, $routeParams, $location, $q, fb
             }
         });
     }
+    
+    function validateDates(startDate, stopDate) {
+    	var startInMillis = Date.parse(startDate);
+        var now = Date.now();
+        if (startInMillis > now) {
+        	throw 'Start date cannot in the future';
+        } 
+        if (stopDate) {
+        	var stopInMillis = Date.parse(stopDate);
+        	if (stopInMillis >= now) {
+        		throw 'Stop date cannot in the future'; 
+        	} 
+        	if (startInMillis > stopInMillis) {
+        		throw 'Start date cannot be after the stop date'; 
+        	}
+        } 
+    }
 
-    // TODO: Don't allow future date for startDate
     $scope.saveTreatment = function() {
         $scope.errorMessage = '';
 
         if ($scope.patient) {
+        	var startDate = this.treatment.startDate;
             var treatment = {
                 drug: this.treatment.drug,
-                startDate: this.treatment.startDate
+                startDate :startDate
             };
-            var result;
-            if ($scope.treatment.id) {
-            	treatment.id = $scope.treatment.id;
-                result = Patients.updateTreatment($scope.patient.id, treatment);
-            } else {
-                result = Patients.addTreatment($scope.patient.id, treatment);
+            var stopDate = this.treatment.stopDate;
+            if (stopDate) {
+            	treatment.stopDate = stopDate;
             }
-            result.then($location.path('/patients/' + $scope.patient.id).search('step', '2'));
+            try {
+            	validateDates(startDate, stopDate); 
+            	var result;
+                if ($scope.treatment.id) {
+                	treatment.id = $scope.treatment.id;
+                    result = Patients.updateTreatment($scope.patient.id, treatment);
+                } else {
+                    result = Patients.addTreatment($scope.patient.id, treatment);
+                }
+                result.then($location.path('/patients/' + $scope.patient.id).search('step', '2'));
+            } catch(err) {
+            	$scope.errorMessage = err;
+            } 
         }
     };
 
