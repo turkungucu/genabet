@@ -52,11 +52,8 @@ c.directive('patientTable', function() {
                             data: 'id',
                             orderable: false,
                             render: function(data, type, row, meta) {
-                                var detailsLink = '<a href="#/patients/' + data + '" class="action-icon-info"><i class="fa fa-search padding-right-10"></i></a>';
-                                var editLink = '<a href="#/patients/' + data + '/edit" class="action-icon-primary"><i class="fa fa-pencil padding-right-10"></i></a>';
-                                var addSampleLink = '<a href="#/patients/' + data + '/samples/new" class="action-icon-purple"><i class="fa fa-flask padding-right-10"></i></a>';
-                                var addTreatmentLink = '<a href="#/patients/' + data + '/treatments/new" class="action-icon-danger"><i class="fa fa-medkit padding-right-10"></i></a>';
-                                return detailsLink + '&nbsp;' + editLink + '&nbsp;' + addSampleLink + '&nbsp;' + addTreatmentLink;
+                                var detailsLink = '<a href="#/patients/' + data + '" class="btn btn-success waves-effect waves-light btn-xs m-b-5"><i class="fa fa-search"></i> Details</a>';
+                                return detailsLink;
                             }
                         }]
                     });
@@ -101,7 +98,7 @@ c.directive('sampleTable', function() {
                                 if ('CREATED' === status) {
                                     labelClass = 'label-warning';
                                 } else if ('READY' === status) {
-                                    labelClass = 'label-success';
+                                    labelClass = 'label-primary';
                                 } else if ('PROCESSING' == status) {
                                     labelClass = 'label-purple';
                                 }
@@ -123,7 +120,7 @@ c.directive('sampleTable', function() {
                             render: function(data, type, row, meta) {
                                 var status = row.status;
                                 if ('READY' === status) {
-                                    resultsLink = '<a href="#/samples/' + data + '/results" class="btn btn-primary waves-effect waves-light btn-xs m-b-5"><i class="glyphicon glyphicon-search"></i> Results</i></a>';
+                                    resultsLink = '<a href="#/samples/' + data + '/results" class="btn btn-success waves-effect waves-light btn-xs m-b-5"><i class="fa fa-flask"></i> Results</i></a>';
                                     return resultsLink;
                                 } else {
                                     return '';

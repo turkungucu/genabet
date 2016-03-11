@@ -178,7 +178,7 @@ app.controller('SavePatientCtrl', function($scope, $location, $routeParams, Pati
         if ($scope.patient) {
             patient.id = $scope.patient.id;
         }
-        Patients.save(patient).then($location.path('/patients'));
+        Patients.save(patient).then($location.path('/patients/' + patient.id).search('step', '4'));
     }
 
     $scope.removePatient = function() {
@@ -271,22 +271,22 @@ app.controller('TreatmentCtrl', function($scope, $routeParams, $location, $q, fb
             }
         });
     }
-    
+
     function validateDates(startDate, stopDate) {
     	var startInMillis = Date.parse(startDate);
         var now = Date.now();
         if (startInMillis > now) {
         	throw 'Start date cannot in the future';
-        } 
+        }
         if (stopDate) {
         	var stopInMillis = Date.parse(stopDate);
         	if (stopInMillis >= now) {
-        		throw 'Stop date cannot in the future'; 
-        	} 
-        	if (startInMillis > stopInMillis) {
-        		throw 'Start date cannot be after the stop date'; 
+        		throw 'Stop date cannot in the future';
         	}
-        } 
+        	if (startInMillis > stopInMillis) {
+        		throw 'Start date cannot be after the stop date';
+        	}
+        }
     }
 
     $scope.saveTreatment = function() {
@@ -303,7 +303,7 @@ app.controller('TreatmentCtrl', function($scope, $routeParams, $location, $q, fb
             	treatment.stopDate = stopDate;
             }
             try {
-            	validateDates(startDate, stopDate); 
+            	validateDates(startDate, stopDate);
             	var result;
                 if ($scope.treatment.id) {
                 	treatment.id = $scope.treatment.id;
@@ -314,7 +314,7 @@ app.controller('TreatmentCtrl', function($scope, $routeParams, $location, $q, fb
                 result.then($location.path('/patients/' + $scope.patient.id).search('step', '2'));
             } catch(err) {
             	$scope.errorMessage = err;
-            } 
+            }
         }
     };
 
