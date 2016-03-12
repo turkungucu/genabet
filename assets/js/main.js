@@ -74,8 +74,8 @@ app.service('Patients', ['fbRef', '$q', function(fbRef, $q) {
             return tref(patientId).push(treatment);
         },
         updateTreatment: function(patientId, treatment) {
-        	var treatmentId = treatment.id;
-        	delete treatment.id;
+            var treatmentId = treatment.id;
+            delete treatment.id;
             return tridef(patientId, treatmentId).set(treatment);
         },
         removeTreatment: function(patientId, treatmentId) {
@@ -142,8 +142,8 @@ app.controller('PatientListCtrl', function($scope, $location, Patients) {
 });
 
 app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients, Samples) {
-	var step = $location.search()['step'];
-	$scope.step = step ? parseInt(step) : 1;
+    var step = $location.search()['step'];
+    $scope.step = step ? parseInt(step) : 1;
     var patientId = $routeParams.id;
     if (patientId) {
         Patients.get(patientId).then(function(patient) {
@@ -169,11 +169,25 @@ app.controller('SavePatientCtrl', function($scope, $location, $routeParams, Pati
         });
     }
     $scope.savePatient = function() {
+        var now = Date.now();
+        var birthDate = this.patient.birthDate;
+        if (Date.parse(birthDate) > now) {
+            $scope.errorMessage = 'Birthday cannot in the future';
+            return;
+        }
+
+        var diagnosisDate = this.patient.diagnosisDate;
+        if (Date.parse(diagnosisDate) > now) {
+            $scope.errorMessage = 'Diagnosis date cannot in the future';
+            return;
+        }
+
         var patient = {
             firstName: this.patient.firstName,
             lastName: this.patient.lastName,
             birthDate: this.patient.birthDate,
-            diagnosis: this.patient.diagnosis
+            diagnosis: this.patient.diagnosis,
+            diagnosisDate: diagnosisDate
         };
         if ($scope.patient) {
             patient.id = $scope.patient.id;
@@ -233,20 +247,28 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
     $scope.saveSample = function() {
         $scope.errorMessage = '';
 
+        var extDate = this.sample.extractionDate;
+        if (Date.parse(extDate) > Date.now()) {
+            $scope.errorMessage = 'Extraction date cannot in the future';
+            return;
+        }
+
         var sampleName = this.sample.name;
         var sample = {
             name: sampleName,
-            details: this.sample.details
+            details: this.sample.details,
+            extractionDate: extDate
         };
 
+        var redirectLink = '/patients/' + patientId;
         if ($scope.sample.id) {
             sample.id = $scope.sample.id;
             // TODO: Check for existing samples
-            Samples.save(sample).then($location.path('/samples'));
+            Samples.save(sample).then($location.path(redirectLink));
         } else {
             checkExistingSample(sampleName, function() {
                 sample.status = 'CREATED';
-                Samples.saveUnderPatient(sample, $scope.patient).then($location.path('/samples'));
+                Samples.saveUnderPatient(sample, $scope.patient).then($location.path(redirectLink));
             });
         }
     };
@@ -273,19 +295,19 @@ app.controller('TreatmentCtrl', function($scope, $routeParams, $location, $q, fb
     }
 
     function validateDates(startDate, stopDate) {
-    	var startInMillis = Date.parse(startDate);
+        var startInMillis = Date.parse(startDate);
         var now = Date.now();
         if (startInMillis > now) {
-        	throw 'Start date cannot in the future';
+            throw 'Start date cannot in the future';
         }
         if (stopDate) {
-        	var stopInMillis = Date.parse(stopDate);
-        	if (stopInMillis >= now) {
-        		throw 'Stop date cannot in the future';
-        	}
-        	if (startInMillis > stopInMillis) {
-        		throw 'Start date cannot be after the stop date';
-        	}
+            var stopInMillis = Date.parse(stopDate);
+            if (stopInMillis >= now) {
+                throw 'Stop date cannot in the future';
+            }
+            if (startInMillis > stopInMillis) {
+                throw 'Start date cannot be after the stop date';
+            }
         }
     }
 
@@ -293,27 +315,27 @@ app.controller('TreatmentCtrl', function($scope, $routeParams, $location, $q, fb
         $scope.errorMessage = '';
 
         if ($scope.patient) {
-        	var startDate = this.treatment.startDate;
+            var startDate = this.treatment.startDate;
             var treatment = {
                 drug: this.treatment.drug,
-                startDate :startDate
+                startDate: startDate
             };
             var stopDate = this.treatment.stopDate;
             if (stopDate) {
-            	treatment.stopDate = stopDate;
+                treatment.stopDate = stopDate;
             }
             try {
-            	validateDates(startDate, stopDate);
-            	var result;
+                validateDates(startDate, stopDate);
+                var result;
                 if ($scope.treatment.id) {
-                	treatment.id = $scope.treatment.id;
+                    treatment.id = $scope.treatment.id;
                     result = Patients.updateTreatment($scope.patient.id, treatment);
                 } else {
                     result = Patients.addTreatment($scope.patient.id, treatment);
                 }
                 result.then($location.path('/patients/' + $scope.patient.id).search('step', '2'));
-            } catch(err) {
-            	$scope.errorMessage = err;
+            } catch (err) {
+                $scope.errorMessage = err;
             }
         }
     };
