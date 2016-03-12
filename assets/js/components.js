@@ -44,10 +44,8 @@ c.directive('patientTable', function() {
                             data: 'diagnosis',
                             defaultContent: ''
                         }, {
-                            data: 'dateCreated',
-                            render: function(data, type, row, meta) {
-                                return data ? moment(data).fromNow() : '';
-                            }
+                            data: 'diagnosisDate',
+                            defaultContent: ''
                         }, {
                             data: 'id',
                             orderable: false,

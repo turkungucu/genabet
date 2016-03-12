@@ -28,6 +28,11 @@
 							<input type="text" class="form-control" id="description" ng-model="sample.details" placeholder="Description">
 				        </div>
 				        <div class="form-group">
+				        	<label for="description">Extraction Date</label>
+							<input type="text" class="form-control" id="startDate" placeholder="mm/dd/yyyy"
+								ng-model="sample.extractionDate" date-picker required>
+						</div>
+				        <div class="form-group">
 				        	<label for="fupload">File Upload</label>
 				            <div class="dropzone" id="fupload" dropzone></div>
 				        </div>
