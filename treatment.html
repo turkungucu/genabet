@@ -18,22 +18,39 @@
 					<div class="alert alert-danger" ng-show="errorMessage">
 		    			{{errorMessage}}
            			</div>
-				    <form role="form" ng-submit="saveTreatment()" data-parsley-validate>
+				    <form role="form" ng-submit="saveTreatment()" data-parsley-validate
+				    			class="form-horizontal">
 				        <div class="form-group">
-				        	<label for="sampleName">Drug</label>
-							<input type="text" placeholder="Enter drug" class="form-control" id="drug" ng-model="treatment.drug" required>
+				        	<label for="sampleName" class="col-sm-3 control-label">Drug</label>
+				        	<div class="col-sm-9">
+										<input type="text" placeholder="Enter drug" class="form-control" id="drug"
+													 ng-model="treatment.drug" required>
+									</div>
 				        </div>
 				        <div class="form-group">
-				        	<label for="description">Start Date</label>
-							<input type="text" class="form-control" id="startDate" placeholder="mm/dd/yyyy"
-								ng-model="treatment.startDate" date-picker required>
+				        	<label for="startDate" class="col-sm-3 control-label">Start Date</label>
+				        	<div class="col-sm-9">
+										<input type="text" class="form-control" id="startDate"
+												 	 placeholder="mm/dd/yyyy" ng-model="treatment.startDate"
+												 	 date-picker required>
+									</div>
 				        </div>
 				        <div class="form-group">
-				        	<label for="description">Stop Date</label>
-				        	<input type="text" class="form-control" id="stopDate" placeholder="mm/dd/yyyy"
-								ng-model="treatment.stopDate" date-picker>
+				        	<label for="stopDate" class="col-sm-3 control-label">Stop Date</label>
+				        	<div class="col-sm-9">
+				        		<input type="text" class="form-control" id="stopDate"
+				        					 placeholder="mm/dd/yyyy" ng-model="treatment.stopDate" date-picker>
+				        	</div>
 				        </div>
-				        <button type="submit" class="btn btn-primary waves-effect waves-light">Save</button>
+				        <div class="form-group m-b-0">
+				        	<div class="col-sm-offset-3 col-sm-9">
+				          	<button type="submit" class="btn btn-primary waves-effect waves-light">
+				          		Save
+				          	</button>
+				          	<a href="#/patients/{{patient.id}}?step=2" role="button"
+				          		 class="btn btn-default waves-effect waves-light m-l-5">Cancel</a>
+				           </div>
+				        </div>
 				    </form>
 				</div>
 			</div>
