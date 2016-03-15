@@ -73,7 +73,7 @@ c.directive('sampleTable', function() {
                     element.DataTable({
                         data: scope.rows,
                         order: [
-                            [0, "desc"]
+                            [3, "desc"]
                         ],
                         columns: [{
                             data: 'name',
@@ -110,6 +110,7 @@ c.directive('sampleTable', function() {
                         }, {
                             data: 'dateCreated',
                             render: function(data, type, row, meta) {
+                                if(type == 'sort') return data;
                                 return data ? moment(data).fromNow() : '';
                             }
                         }, {
