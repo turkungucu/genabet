@@ -22,82 +22,102 @@
             <li ng-class="step === 3 ? 'active' : ''">
               <a aria-expanded="false" data-toggle="tab" ng-click="step = 3">
                 <span class="visible-xs"><i class="fa fa-charts"></i></span>
-                <span class="hidden-xs">History</span>
+                <span class="hidden-xs">Progress</span>
               </a>
             </li>
             <li ng-class="step === 4 ? 'active' : ''">
               <a aria-expanded="false" data-toggle="tab" ng-click="step = 4">
+                <span class="visible-xs"><i class="fa fa-charts"></i></span>
+                <span class="hidden-xs">History</span>
+              </a>
+            </li>
+            <li ng-class="step === 5 ? 'active' : ''">
+              <a aria-expanded="false" data-toggle="tab" ng-click="step = 5">
                 <span class="visible-xs"><i class="fa fa-search"></i></span>
                 <span class="hidden-xs">Profile</span>
               </a>
             </li>
         </ul>
+        
         <div class="tab-content">
           <div id="samples" class="tab-pane" ng-class="step === 1 ? 'active' : ''">
             <p class="text-muted m-b-30 font-13">
-				    	Click on the sample name to edit. You can also view results for samples in <code>READY</code> state.
-						</p>
-						<a href="#/patients/{{patient.id}}/samples/new" class="btn btn-primary btn-custom waves-effect waves-light m-b-5" role="button">
-							<i class="fa fa-plus m-r-5"></i> <span>Create new</span>
-						</a>
+				Click on the sample name to edit. You can also view results for samples in <code>READY</code> state.
+			</p>
+			<a href="#/patients/{{patient.id}}/samples/new" class="btn btn-primary btn-custom waves-effect waves-light m-b-5" role="button">
+				<i class="fa fa-plus m-r-5"></i> <span>Create new</span>
+			</a>
+			<table class="table table-hover" ng-if="samples && samples.length > 0">
+				<thead>
+					<tr><th>Sample</th><th>Extraction date</th><th>Status</th><th>Results</th></tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="s in samples">
+						<td>
+							<a href="#/patients/{{patient.id}}/samples/{{s.id}}">{{s.name}}</a>
+						</td>
+						<td>{{s.extractionDate}}</td>
+						<td>
+							<span ng-if="'READY' === s.status">
+					    		<span class="label label-primary">{{s.status}}</span>
+					    	</span>
 
-						<table class="table table-hover" ng-if="samples && samples.length > 0">
-							<thead>
-								<tr><th>Sample</th><th>Extraction date</th><th>Status</th><th>Results</th></tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="s in samples">
-									<td>
-										<a href="#/patients/{{patient.id}}/samples/{{s.id}}">{{s.name}}</a>
-									</td>
-									<td>{{s.extractionDate}}</td>
-									<td>
-										<span ng-if="'READY' === s.status">
-								    		<span class="label label-primary">{{s.status}}</span>
-								    	</span>
+					    	<span ng-if="'CREATED' === s.status">
+					    		<span class="label label-warning">{{s.status}}</span>
+					    	</span>
 
-								    	<span ng-if="'CREATED' === s.status">
-								    		<span class="label label-warning">{{s.status}}</span>
-								    	</span>
-
-								    	<span ng-if="'PROCESSING' === s.status">
-								    		<span class="label label-purple">{{s.status}}</span>
-								    	</span>
-									</td>
-									<td>
-										<span ng-if="'READY' === s.status">
-											<a href="#/samples/{{s.id}}/results" class="btn btn-success waves-effect waves-light btn-xs m-b-5"><i class="fa fa-flask"></i> Results
-											</a>
-										</span>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+					    	<span ng-if="'PROCESSING' === s.status">
+					    		<span class="label label-purple">{{s.status}}</span>
+					    	</span>
+						</td>
+						<td>
+							<span ng-if="'READY' === s.status">
+								<a href="#/samples/{{s.id}}/results" class="btn btn-success waves-effect waves-light btn-xs m-b-5"><i class="fa fa-flask"></i> Results
+								</a>
+							</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
           </div>
           <div id="treatments" class="tab-pane" ng-class="step === 2 ? 'active' : ''">
             <a href="#/patients/{{patient.id}}/treatments/new" class="btn btn-primary btn-custom waves-effect waves-light m-b-5" role="button">
-							<i class="fa fa-plus m-r-5"></i> <span>Create new</span>
-						</a>
-						<table class="table table-hover" ng-if="patient.treatments && patient.treatments.length > 0">
-							<thead>
-								<tr><th>Drug</th><th>Start Date</th><th>Stop Date</th><th></th></tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="t in patient.treatments">
-									<td>{{t.drug}}</td>
-									<td>{{t.startDate}}</td>
-									<td>{{t.stopDate}}</td>
-									<td>
-										<a href="#/patients/{{patient.id}}/treatments/{{t.id}}"
-				               class="btn btn-success waves-effect waves-light btn-xs m-b-5">
-				              <i class="fa fa-pencil"></i> Edit
-				            </a>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+				<i class="fa fa-plus m-r-5"></i> <span>Create new</span>
+			</a>
+			<table class="table table-hover" ng-if="patient.treatments && patient.treatments.length > 0">
+				<thead>
+					<tr><th>Drug</th><th>Start Date</th><th>Stop Date</th><th></th></tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="t in patient.treatments">
+						<td>{{t.drug}}</td>
+						<td>{{t.startDate}}</td>
+						<td>{{t.stopDate}}</td>
+						<td>
+							<a href="#/patients/{{patient.id}}/treatments/{{t.id}}"
+	               class="btn btn-success waves-effect waves-light btn-xs m-b-5">
+	              <i class="fa fa-pencil"></i> Edit
+	            </a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
           </div>
-          <div id="history" class="tab-pane" ng-class="step === 3 ? 'active' : ''">
+          
+          <div class="tab-content">
+	      	<div id="progress" class="tab-pane" ng-class="step === 3 ? 'active' : ''">
+	      		<div ng-if="analyzedSamples && analyzedSamples.length > 0">
+	      			<div progress-chart data="patient.progressData"></div>
+	      		</div>
+				<div ng-if="!analyzedSamples || analyzedSamples.length === 0">
+					<p class="text-muted m-b-30 font-13">
+						Patient has no analyzed samples
+					</p>
+				</div>
+	      	</div>
+       	  </div>
+          
+          <div id="history" class="tab-pane" ng-class="step === 4 ? 'active' : ''">
             <div class="timeline">
 	            <article class="timeline-item alt">
                 <div class="text-right">
@@ -159,7 +179,7 @@
 	            </article>
 	          </div>
 	        </div>
-	        <div id="details" class="tab-pane" ng-class="step === 4 ? 'active' : ''">
+	        <div id="details" class="tab-pane" ng-class="step === 5 ? 'active' : ''">
 	        	<form role="form" class="form-horizontal">
 	            <div class="form-group">
 	                <label class="col-sm-2 control-label">First Name</label>
