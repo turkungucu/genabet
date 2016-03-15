@@ -56,6 +56,9 @@ app.service('Patients', ['fbRef', '$q', function(fbRef, $q) {
     var tridef = function(patientId, treatmentId) {
         return fbRef.child('/patients/' + patientId + '/treatments/' + treatmentId);
     }
+    var progdef = function(patientId) {
+        return fbRef.child('/patients/' + patientId + '/progressData');
+    }
 
     return {
         list: function(beforeFn) {
@@ -92,6 +95,9 @@ app.service('Patients', ['fbRef', '$q', function(fbRef, $q) {
             } else {
                 return [];
             }
+        },
+        addProgressData: function(patientId, progressData) {
+            return progdef(patientId).set(progressData);
         }
     };
 }]);
@@ -142,6 +148,70 @@ app.controller('PatientListCtrl', function($scope, $location, Patients) {
 });
 
 app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients, Samples) {
+    // Mock progress data
+    var progressData = [
+        [
+            ['Mutation Level', 'BRAF V600E', 'Dabrafenib', 'Ipilimumab'],
+            ['1', 1000, undefined, undefined],
+            ['2', 1050, undefined, undefined],
+            ['3', 900, 1200, undefined],
+            ['4', 800, 1200, undefined],
+            ['5', 750, 1200, undefined],
+            ['6', 800, 1200, undefined],
+            ['7', 900, 1200, undefined],
+            ['8', 1000, undefined, undefined],
+            ['9', 850, undefined, 1200],
+            ['10', 500, undefined, 1200],
+            ['11', 200, undefined, 1200],
+            ['12', 100, undefined, 1200]
+        ],
+        [
+            ['Mutation Level', 'EGFR 790M', 'Osimertinib'],
+            ['1', 200, undefined],
+            ['2', 250, undefined],
+            ['3', 180, 300],
+            ['4', 150, 300],
+            ['5', 110, 300],
+            ['6', 95, 300],
+            ['7', 80, 300],
+            ['8', 70, 300],
+            ['9', 65, 300],
+            ['10', 50, undefined],
+            ['11', 40, undefined],
+            ['12', 35, undefined]
+        ],
+        [
+            ['Mutation Level', 'KRAS G12D', 'Bevacizumab', 'Everolimus'],
+            ['1', 100, undefined, undefined],
+            ['2', 200, undefined, undefined],
+            ['3', 300, 1200, undefined],
+            ['4', 250, 1200, undefined],
+            ['5', 330, 1200, undefined],
+            ['6', 500, 1200, undefined],
+            ['7', 650, undefined, undefined],
+            ['8', 700, undefined, 1200],
+            ['9', 720, undefined, 1200],
+            ['10', 850, undefined, 1200],
+            ['11', 900, undefined, 1200],
+            ['12', 980, undefined, undefined]
+        ],
+        [
+            ['Mutation Level', 'NRAS Q61H', 'Ipilimumab'],
+            ['1', 2000, 2200],
+            ['2', 1800, 2200],
+            ['3', 400, 2200],
+            ['4', 200, 2200],
+            ['5', 100, 2200],
+            ['6', 80, 2200],
+            ['7', 75, undefined],
+            ['8', 60, undefined]
+        ]
+    ];
+
+    function randInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
     var step = $location.search()['step'];
     $scope.step = step ? parseInt(step) : 1;
     var patientId = $routeParams.id;
@@ -149,14 +219,37 @@ app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients
         Patients.get(patientId).then(function(patient) {
             $scope.patient = patient;
             if (patient.samples) {
+                $scope.analyzedSamples = [];
                 $scope.samples = patient.samples.reduce(function(res, sample) {
                     Samples.get(sample.id).then(function(sample) {
                         res.push(sample);
+                        if ('READY' === sample.status) $scope.analyzedSamples.push(sample);
                     });
                     return res;
                 }, []);
             }
             $scope.patient.treatments = Patients.getTreatments(patient);
+
+            // Generate and save mock progress data
+            if (!$scope.patient.progressData) {
+                var randProgData = progressData[randInt(0, progressData.length - 1)];
+                // Can't store undefined values in Firebase, so replace them with -1
+                var fbRandProgData = randProgData.map(function(data) {
+                    return data.map(function(value) {
+                        return value ? value : -1;
+                    });
+                });
+                $scope.patient.progressData = randProgData;
+                Patients.addProgressData(patientId, fbRandProgData);
+            } else {
+                // Replace the -1s with undefined so that Google Charts works
+                var progData = $scope.patient.progressData.map(function(data) {
+                    return data.map(function(value) {
+                        return value === -1 ? undefined : value;
+                    })
+                });
+                $scope.patient.progressData = progData;
+            }
         });
     }
 });
@@ -192,7 +285,7 @@ app.controller('SavePatientCtrl', function($scope, $location, $routeParams, Pati
         if ($scope.patient) {
             patient.id = $scope.patient.id;
         }
-        Patients.save(patient).then($location.path('/patients/' + patient.id).search('step', '4'));
+        Patients.save(patient).then($location.path('/patients/' + patient.id).search('step', '5'));
     }
 
     $scope.removePatient = function() {
@@ -201,10 +294,6 @@ app.controller('SavePatientCtrl', function($scope, $location, $routeParams, Pati
             Patients.remove($scope.patient.id).then($location.path('/patients'));
         }
     };
-});
-
-app.controller('HomeCtrl', function($scope) {
-
 });
 
 app.controller('SampleListCtrl', function($scope, $location, Samples) {
@@ -356,9 +445,6 @@ app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRe
         type: 'Substitution - Missense',
         effect: 'Codon change',
         tissues: ['Pancreas', 'Large intestine', 'Lung', 'Billary tract', 'Ovary'],
-        quality: 100,
-        readDepth: 1000,
-        alleleFrequency: 0.001,
         cosmicId: 518
     }, {
         gene: 'EGFR',
@@ -367,9 +453,6 @@ app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRe
         type: 'Substitution - Missense',
         effect: 'Codon change',
         tissues: ['Lung', 'Breast', 'Upper aerodigestive tract', 'Billary tract', 'Central nervous system'],
-        quality: 250,
-        readDepth: 1052,
-        alleleFrequency: 0.001,
         cosmicId: 6240
     }, {
         gene: 'EGFR',
@@ -378,9 +461,6 @@ app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRe
         type: 'Insertion',
         effect: 'Codon insertion',
         tissues: ['Lung'],
-        quality: 230,
-        readDepth: 1122,
-        alleleFrequency: 0.002,
         cosmicId: 26720
     }, {
         gene: 'EGFR',
@@ -389,21 +469,15 @@ app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRe
         type: 'Deletion',
         effect: 'Frame shift',
         tissues: ['Ovary'],
-        quality: 230,
-        readDepth: 1310,
-        alleleFrequency: 0.003,
         cosmicId: 111519
     }, {
         gene: 'BRAF',
-        cdsChange: 'c.1415A>G',
-        aaChange: 'Y472C',
+        cdsChange: 'c.1799T>A',
+        aaChange: 'V600E',
         type: 'Substitution - Missense',
         effect: 'Codon change',
-        tissues: ['Lung', 'Large intestine'],
-        quality: 220,
-        readDepth: 1295,
-        alleleFrequency: 0.001,
-        cosmicId: 1133046
+        tissues: ['Thyroid', 'Skin', 'Large intestine'],
+        cosmicId: 476
     }, {
         gene: 'PTEN',
         cdsChange: 'c.697C>T',
@@ -411,9 +485,6 @@ app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRe
         type: 'Substitution - Missense',
         effect: 'Stop gained',
         tissues: ['Endometrium', 'Central nervous system', 'Large intestine', 'Cervix', 'Lung'],
-        quality: 423,
-        readDepth: 1125,
-        alleleFrequency: 0.001,
         cosmicId: 5154
     }, {
         gene: 'FGFR1',
@@ -422,9 +493,6 @@ app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRe
         type: 'Insertion',
         effect: 'Frame shift',
         tissues: ['Large intestine'],
-        quality: 122,
-        readDepth: 1069,
-        alleleFrequency: 0.001,
         cosmicId: 1456945
     }, {
         gene: 'FGFR1',
@@ -432,10 +500,7 @@ app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRe
         aaChange: '',
         type: 'Amplificitation',
         effect: '',
-        tissues: ['Lung'],
-        quality: 566,
-        readDepth: 1278,
-        alleleFrequency: 0.001
+        tissues: ['Lung']
     }, {
         gene: 'DDR2',
         cdsChange: 'c.1734delT',
@@ -443,21 +508,15 @@ app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRe
         type: 'Deletion',
         effect: 'Frame shift',
         tissues: ['Kidney'],
-        quality: 612,
-        readDepth: 998,
-        alleleFrequency: 0.002,
         cosmicId: 20753
     }, {
-        gene: 'MAP2K1',
-        cdsChange: 'c.167A>C',
-        aaChange: 'Q56P',
+        gene: 'NRAS',
+        cdsChange: 'c.183A>C',
+        aaChange: 'Q61H',
         type: 'Substitution - Missense',
         effect: 'Codon change',
-        tissues: ['Stomach', 'Large intestine', 'Haematopoietic and lymphoid', 'Lung'],
-        quality: 618,
-        readDepth: 1323,
-        alleleFrequency: 0.002,
-        cosmicId: 1235481
+        tissues: ['Haematopoietic and lymphoid', 'Skin', 'Large intestine', 'Thyroid'],
+        cosmicId: 586
     }];
 
     function randInt(min, max) {
@@ -469,7 +528,11 @@ app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRe
         var start = randInt(0, 4);
         var end = randInt(5, 9);
         for (var i = start; i <= end; i++) {
-            randMut.push(mutations[i]);
+            var mut = mutations[i];
+            mut.numCopiesPerMl = randInt(100, 1200);
+            mut.readDepth = randInt(900, 1200);
+            mut.quality = randInt(30, 300);
+            randMut.push(mut);
         }
         return randMut;
     }

@@ -180,7 +180,7 @@ c.directive('mutationsTable', function() {
                             data: 'readDepth',
                             defaultContent: ''
                         }, {
-                            data: 'alleleFrequency',
+                            data: 'numCopiesPerMl',
                             defaultContent: ''
                         }, {
                             data: 'cosmicId',
@@ -216,6 +216,50 @@ c.directive('donutChart', function() {
                             "#DC143C", "#FF8C00", "#FF1493", "#FFB6C1", "#F5FFFA", "#000080"
                         ]
                     });
+                }
+            });
+        }
+    };
+});
+
+c.directive('progressChart', function() {
+    return {
+        restrict: 'A,E',
+        scope: {
+            data: '='
+        },
+        link: function(scope, element, attrs, controller) {
+            scope.$watch('data', function() {
+                if (scope.data) {
+                    google.charts.setOnLoadCallback(drawChart);
+
+                    function drawChart() {
+                        var data = google.visualization.arrayToDataTable(scope.data);
+
+                        var options = {
+                            title: 'Plasma Mutation Levels over Time',
+                            hAxis: {
+                                title: 'Month',
+                                titleTextStyle: {
+                                    color: '#333'
+                                }
+                            },
+                            vAxis: {
+                                title: 'Mutation copies/mL',
+                                minValue: 0
+                            },
+                            series: {
+                                0: {
+                                    areaOpacity: 0.0
+                                }
+                            },
+                            width: 900,
+                            height: 500
+                        };
+
+                        var chart = new google.visualization.AreaChart(element[0]);
+                        chart.draw(data, options);
+                    }
                 }
             });
         }
