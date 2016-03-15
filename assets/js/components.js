@@ -231,8 +231,6 @@ c.directive('progressChart', function() {
         link: function(scope, element, attrs, controller) {
             scope.$watch('data', function() {
                 if (scope.data) {
-                    google.charts.setOnLoadCallback(drawChart);
-
                     function drawChart() {
                         var data = google.visualization.arrayToDataTable(scope.data);
 
@@ -260,6 +258,8 @@ c.directive('progressChart', function() {
                         var chart = new google.visualization.AreaChart(element[0]);
                         chart.draw(data, options);
                     }
+                    
+                    google.charts.setOnLoadCallback(drawChart);
                 }
             });
         }
