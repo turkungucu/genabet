@@ -117,68 +117,37 @@
 	      	</div>
        	  </div>
           
+          <!-- History tab -->
           <div id="history" class="tab-pane" ng-class="step === 4 ? 'active' : ''">
             <div class="timeline">
-	            <article class="timeline-item alt">
-                <div class="text-right">
-                  <div class="time-show first">
-                    <a class="btn btn-primary w-lg" href="#">Today</a>
-                  </div>
-                </div>
-	            </article>
-	            <article class="timeline-item alt">
-                <div class="timeline-desk">
-                  <div class="panel">
-                    <div class="panel-body">
-                      <span class="arrow-alt"></span>
-                      <span class="timeline-icon"></span>
-                      <h4 class="text-danger">1 hour ago</h4>
-                      <p class="timeline-date text-muted"><small>08:25 am</small></p>
-                      <p>Dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? </p>
-                    </div>
-                  </div>
-                </div>
-	            </article>
-	            <article class="timeline-item ">
-	                <div class="timeline-desk">
-	                    <div class="panel">
-	                        <div class="panel-body">
-	                            <span class="arrow"></span>
-	                            <span class="timeline-icon"></span>
-	                            <h4 class="text-success">2 hours ago</h4>
-	                            <p class="timeline-date text-muted"><small>08:25 am</small></p>
-	                            <p>consectetur adipisicing elit. Iusto, optio, dolorum <a href="#">John deon</a> provident rerum aut hic quasi placeat iure tempora laudantium </p>
-
-	                        </div>
+	            <article class="timeline-item" ng-repeat="hevnt in historyEvents" ng-class="$index % 2 == 0 ? 'alt' : ''">
+	            	<div class="text-right" ng-if="$index === 0">
+	            		<div class="time-show first">
+	                    	<a class="btn btn-primary w-lg">{{hevnt.title}} <br/> {{hevnt.ts}}</a>
+	                  	</div>
+	            	</div>
+	            	<div class="timeline-desk" ng-if="$index > 0">
+	                  <div class="panel">
+	                    <div class="panel-body">
+	                    	<span class="timeline-icon"></span>
+	                    	<div class="row">
+					          <div class="col-xs-2">			          
+					            <i class="fa fa-flask fa-3x" ng-if="'SAMPLE' === hevnt.type"></i>
+					            <i class="fa fa-medkit fa-3x" ng-if="'TREATMENT' === hevnt.type"></i>
+					          </div>
+					          <div class="col-xs-10 text-right">
+			                    <h4 class="text-danger">{{hevnt.ts}}</h4>
+			                    <p>{{hevnt.title}}</p>
+					          </div>
+					       	</div>
 	                    </div>
-	                </div>
-	            </article>
-	            <article class="timeline-item alt">
-	                <div class="timeline-desk">
-	                    <div class="panel">
-	                        <div class="panel-body">
-	                            <span class="arrow-alt"></span>
-	                            <span class="timeline-icon"></span>
-	                            <h4 class="text-primary">10 hours ago</h4>
-	                            <p class="timeline-date text-muted"><small>08:25 am</small></p>
-	                            <p>3 new photo Uploaded on facebook fan page</p>
-	                            <div class="album">
-	                                <a href="#">
-	                                    <img src="assets/images/small/img1.jpg" alt="">
-	                                </a>
-	                                <a href="#">
-	                                    <img src="assets/images/small/img2.jpg" alt="">
-	                                </a>
-	                                <a href="#">
-	                                    <img src="assets/images/small/img3.jpg" alt="">
-	                                </a>
-	                            </div>
-	                        </div>
-	                    </div>
+	                  </div>	                  
 	                </div>
 	            </article>
 	          </div>
 	        </div>
+	        
+	        <!-- Profile tab -->
 	        <div id="details" class="tab-pane" ng-class="step === 5 ? 'active' : ''">
 	        	<form role="form" class="form-horizontal">
 	            <div class="form-group">
@@ -237,7 +206,7 @@
 	          </div>
 	          <div class="col-xs-8 text-right">
 	            <h3 class="text-white counter">{{samples ? samples.length : 0}}</h3>
-				<p class="text-white text-nowrap">Samples</p>
+				<p class="text-white text-nowrap">{{samples.length === 1 ? 'Sample' : 'Samples'}}</p>
 	          </div>
 	       	</div>
 	      </div>
@@ -253,7 +222,7 @@
 	            <h3 class="text-white counter">
 	            	{{patient.treatments ? patient.treatments.length : 0}}
 	            </h3>
-				<p class="text-white text-nowrap">Treatments</p>
+				<p class="text-white text-nowrap">{{patient.treatments.length === 1 ? 'Treatment' : 'Treatments'}}</p>
 	          </div>
 	       	</div>
 	      </div>

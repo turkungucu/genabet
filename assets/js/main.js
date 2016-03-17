@@ -126,7 +126,8 @@ app.service('Samples', ['fbRef', '$q', 'Patients', function(fbRef, $q, Patients)
                 }
                 patient.samples.push({
                     id: sampleId,
-                    name: sample.name
+                    name: sample.name,
+                    extractionDate: sample.extractionDate
                 });
                 Patients.save(patient);
             });
@@ -228,7 +229,8 @@ app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients
                     return res;
                 }, []);
             }
-            $scope.patient.treatments = Patients.getTreatments(patient);
+
+            $scope.patient.treatments = Patients.getTreatments(patient);;
 
             // Generate and save mock progress data
             if (!$scope.patient.progressData) {
@@ -250,6 +252,43 @@ app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients
                 });
                 $scope.patient.progressData = progData;
             }
+
+            // History events
+            var historyEvents = [];
+            historyEvents.push({
+                title: 'Diagnosed with ' + patient.diagnosis,
+                ts: patient.diagnosisDate,
+                type: 'DIAGNOSIS'
+            });
+            var ptrs = patient.treatments;
+            Object.keys(ptrs).forEach(function(trid) {
+                var treatment = ptrs[trid];
+                historyEvents.push({
+                    title: 'Started using ' + treatment.drug,
+                    ts: treatment.startDate,
+                    type: 'TREATMENT'
+                });
+                if (treatment.stopDate) {
+                    historyEvents.push({
+                        title: 'Stopped using ' + treatment.drug,
+                        ts: treatment.stopDate,
+                        type: 'TREATMENT'
+                    });
+                }
+            });
+            var ss = patient.samples;
+            Object.keys(ss).forEach(function(sid) {
+                var sample = ss[sid];
+                historyEvents.push({
+                    title: 'Sample ' + sample.name + " extracted",
+                    ts: sample.extractionDate,
+                    type: 'SAMPLE'
+                });
+            });
+            historyEvents.sort(function(first, second) {
+                return Date.parse(first.ts) - Date.parse(second.ts);
+            });
+            $scope.historyEvents = historyEvents;
         });
     }
 });
@@ -343,11 +382,14 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
         }
 
         var sampleName = this.sample.name;
+        var details = this.sample.details;
         var sample = {
             name: sampleName,
-            details: this.sample.details,
             extractionDate: extDate
         };
+        if (details) {
+            sample.details = details;
+        }
 
         var redirectLink = '/patients/' + patientId;
         if ($scope.sample.id) {
