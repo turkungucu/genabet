@@ -1,10 +1,108 @@
 <div class="row">
     <div class="col-sm-12">
         <h4 class="page-title">{{sample ? 'Edit' : 'New'}} Sample</h4>
+		<div class="alert alert-success col-lg-8" ng-show="'PROCESSING' === sample.status">
+            <i class="fa fa-circle-o-notch fa-spin"></i> &nbsp;Processing since 3 hours ago
+        </div>
     </div>
 </div>
 
 <div class="row">
+	<div class="col-lg-8">
+		<div class="card-box">
+			<h4 class="text-dark header-title m-t-0">Sample Wizard</h4>
+			<p class="text-muted m-b-25 font-13">
+				Patient {{patient.firstName}} {{patient.lastName}}
+			</p>
+
+			<div id="basicwizard" class="pull-in">
+				<ul class="nav nav-tabs navtab-custom nav-justified bg-muted">
+		            <li ng-class="step === 1 ? 'active' : ''">
+		              <a aria-expanded="true" data-toggle="tab" ng-click="step = 1">
+		                <span class="visible-xs"><i class="fa fa-flask"></i></span>
+		                <span class="hidden-xs">Details</span>
+		              </a>
+		            </li>
+		            <li ng-class="step === 2 ? 'active' : ''">
+		              <a aria-expanded="false" data-toggle="tab" ng-click="step = 2">
+		                <span class="visible-xs"><i class="fa fa-medkit"></i></span>
+		                <span class="hidden-xs">Analyze</span>
+		              </a>
+		            </li>
+		        </ul>
+		        
+		        <div class="tab-content">
+		        	<div id="details" class="tab-pane" ng-class="step === 1 ? 'active' : ''">
+					    <p class="text-muted m-b-30 font-13">
+					    	
+					    </p>
+						<div class="alert alert-danger" ng-show="errorMessage">
+			    			{{errorMessage}}
+		       			</div>
+					    <form role="form" class="form-horizontal" ng-submit="saveSample()" data-parsley-validate>
+					        <div class="form-group">
+					        	<label for="sampleName" class="col-sm-2 control-label">Sample name</label>
+					        	<div class="col-sm-10">
+									<input type="text" class="form-control" id="sampleName" ng-model="sample.name" required>
+								</div>
+					        </div>
+					        <div class="form-group">
+					        	<label for="description" class="col-sm-2 control-label">Description</label>
+					        	<div class="col-sm-10">
+									<input type="text" class="form-control" id="description" ng-model="sample.details">
+								</div>
+					        </div>
+					        <div class="form-group">
+					        	<label for="extractionDate" class="col-sm-2 control-label">Extraction Date</label>
+					        	<div class="col-sm-10">
+									<input type="text" class="form-control" id="extractionDate" placeholder="mm/dd/yyyy"
+									ng-model="sample.extractionDate" date-picker required>
+								</div>
+							</div>
+					        
+					        <div class="form-group">
+			            		<div class="col-sm-offset-2 col-sm-10">
+							        <button type="submit" class="btn btn-primary waves-effect waves-light">Save and Continue</button>
+				            		<a href="#/patients/{{patient.id}}?step=1" role="button" class="btn btn-default waves-effect waves-light">Back to Samples</a>
+				            	</div>
+				            </div>
+					    </form>
+		          	</div>
+
+		          	<div id="analyze" class="tab-pane" ng-class="step === 2 ? 'active' : ''">
+		          		<div ng-hide="'PROCESSING' === sample.status">
+					    	<label for="fupload">File Upload</label>
+					    	<div class="dropzone" id="fupload" dropzone></div>
+					    	<button class="btn btn-purple waves-effect waves-light m-t-10" ng-click="analyzeSample()">Analyze</button>
+					    </div>
+
+						<div class="alert alert-danger" ng-show="'PROCESSING' === sample.status">
+                            This sample is currently being analyzed. You may cancel the process by pressing Cancel button below.
+                        </div>
+
+                        <div class="row text-center" ng-show="'PROCESSING' === sample.status">
+                        	<button type="button" class="btn btn-danger waves-effect waves-light" ng-click="cancelAnalysis()">Cancel</button>
+                        	<a href="#/patients/{{patient.id}}?step=1" role="button" class="btn btn-default waves-effect waves-light">Back to Samples</a>
+                        </div>
+<!-- 
+					    <div class="row text-center" ng-show="'PROCESSING' === sample.status">
+						    <div class="well" style="background-color: purple; color: white">
+						    	<i class="fa fa-circle-o-notch fa-spin fa-3x"></i> &nbsp;PROCESSING
+						    </div>
+						    <button type="button" class="btn btn-danger waves-effect waves-light" ng-click="cancelAnalysis()">Cancel</button>
+					    </div> -->
+		          	</div>
+		        </div>
+		    </div>
+	    </div>
+	</div>
+
+	<div class="col-lg-4">
+		
+	</div>
+</div>
+
+<!-- <div class="row">
 	<div class="col-sm-6">
 		<div class="card-box">
 			<div class="row">
@@ -34,7 +132,7 @@
 						</div>
 				        
 				        <button type="submit" class="btn btn-primary waves-effect waves-light">Save</button>
-                		<a href="#/patients/{{patient.id}}?step=1" role="button" class="btn btn-default waves-effect waves-light">Cancel</a>
+                		<a href="#/patients/{{patient.id}}?step=1" role="button" class="btn btn-default waves-effect waves-light">Back</a>
 				    </form>
 				    <hr/>
 				    <div ng-hide="'PROCESSING' === sample.status">
@@ -66,4 +164,4 @@
             </div>
         </div>
 	</div>
-</div>
+</div> -->

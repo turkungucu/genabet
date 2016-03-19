@@ -99,6 +99,8 @@ c.directive('sampleTable', function() {
                                     labelClass = 'label-primary';
                                 } else if ('PROCESSING' == status) {
                                     labelClass = 'label-purple';
+                                } else if ('KILLED' == status) {
+                                    labelClass = 'label-danger';
                                 }
 
                                 if ('PROCESSING' === status) {

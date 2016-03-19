@@ -353,6 +353,9 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
     }
 
     var sampleId = $routeParams.sid;
+    var step = $location.search()['step'];
+    $scope.step = step ? parseInt(step) : 1;
+    
     if (sampleId) {
         Samples.get(sampleId).then(function(sample) {
             $scope.sample = sample;
@@ -394,12 +397,14 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
         var redirectLink = '/patients/' + patientId;
         if ($scope.sample.id) {
             sample.id = $scope.sample.id;
+            redirectLink += '/samples/' + sample.id
             // TODO: Check for existing samples
-            Samples.save(sample).then($location.path(redirectLink));
+            Samples.save(sample).then($location.path(redirectLink).search('step', '2'));
         } else {
+            redirectLink += '/samples/new';
             checkExistingSample(sampleName, function() {
                 sample.status = 'CREATED';
-                Samples.saveUnderPatient(sample, $scope.patient).then($location.path(redirectLink));
+                Samples.saveUnderPatient(sample, $scope.patient).then($location.path(redirectLink).search('step', '2'));
             });
         }
     };
