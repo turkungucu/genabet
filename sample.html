@@ -9,7 +9,7 @@
 
 <div class="row">
 	<div class="col-lg-8">
-		<div class="card-box">
+		<div class="card-box" style="padding-bottom: 0px;">
 			<h4 class="text-dark header-title m-t-0">Sample Wizard</h4>
 			<p class="text-muted m-b-25 font-13">
 				Patient {{patient.firstName}} {{patient.lastName}}
@@ -31,7 +31,7 @@
 		            </li>
 		        </ul>
 		        
-		        <div class="tab-content">
+		        <div class="tab-content" style="box-shadow: none;">
 		        	<div id="details" class="tab-pane" ng-class="step === 1 ? 'active' : ''">
 					    <p class="text-muted m-b-30 font-13">
 					    	
@@ -84,13 +84,6 @@
                         	<button type="button" class="btn btn-danger waves-effect waves-light" ng-click="cancelAnalysis()">Cancel</button>
                         	<a href="#/patients/{{patient.id}}?step=1" role="button" class="btn btn-default waves-effect waves-light">Back to Samples</a>
                         </div>
-<!-- 
-					    <div class="row text-center" ng-show="'PROCESSING' === sample.status">
-						    <div class="well" style="background-color: purple; color: white">
-						    	<i class="fa fa-circle-o-notch fa-spin fa-3x"></i> &nbsp;PROCESSING
-						    </div>
-						    <button type="button" class="btn btn-danger waves-effect waves-light" ng-click="cancelAnalysis()">Cancel</button>
-					    </div> -->
 		          	</div>
 		        </div>
 		    </div>
@@ -101,67 +94,3 @@
 		
 	</div>
 </div>
-
-<!-- <div class="row">
-	<div class="col-sm-6">
-		<div class="card-box">
-			<div class="row">
-				<div class="col-md-12">
-				    <h4 class="m-t-0 header-title">
-				    	Sample Details
-				    </h4>
-				    <p class="text-muted m-b-30 font-13">
-				        Patient {{patient.firstName}} {{patient.lastName}}
-				    </p>
-					<div class="alert alert-danger" ng-show="errorMessage">
-		    			{{errorMessage}}
-           			</div>
-				    <form role="form" ng-submit="saveSample()" data-parsley-validate>
-				        <div class="form-group">
-				        	<label for="sampleName">Sample name</label>
-							<input type="text" class="form-control" id="sampleName" ng-model="sample.name" required>
-				        </div>
-				        <div class="form-group">
-				        	<label for="description">Description</label>
-							<input type="text" class="form-control" id="description" ng-model="sample.details">
-				        </div>
-				        <div class="form-group">
-				        	<label for="description">Extraction Date</label>
-							<input type="text" class="form-control" id="startDate" placeholder="mm/dd/yyyy"
-								ng-model="sample.extractionDate" date-picker required>
-						</div>
-				        
-				        <button type="submit" class="btn btn-primary waves-effect waves-light">Save</button>
-                		<a href="#/patients/{{patient.id}}?step=1" role="button" class="btn btn-default waves-effect waves-light">Back</a>
-				    </form>
-				    <hr/>
-				    <div ng-hide="'PROCESSING' === sample.status">
-				    	<label for="fupload">File Upload</label>
-				    	<div class="dropzone" id="fupload" dropzone></div>
-				    	<button class="btn btn-purple waves-effect waves-light m-t-10" ng-click="analyzeSample()">Analyze</button>
-				    </div>
-				    <div class="row text-center" ng-show="'PROCESSING' === sample.status">
-					    <div class="well" style="background-color: purple; color: white">
-					    	<i class="fa fa-circle-o-notch fa-spin fa-3x"></i> &nbsp;PROCESSING
-					    </div>
-					    <button type="button" class="btn btn-danger waves-effect waves-light" ng-click="cancelAnalysis()">Cancel</button>
-				    </div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-6">
-		<div class="col-lg-6">
-            <div class="panel panel-border panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">How it Works</h3>
-                </div>
-                <div class="panel-body">
-                    <p>Enter sample details and press <code>Save</code> to save your input.</p>
-
-                    <p>Once you are ready to analyze this sample, press <code>Analyze</code>. This will put the sample in <code>Processing</code> state and you will not be able to edit it until processing ends.
-                </div>
-            </div>
-        </div>
-	</div>
-</div> -->
