@@ -406,7 +406,12 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
 
     $scope.analyzeSample = function() {
         $scope.sample.status = 'PROCESSING';
-        Samples.save($scope.sample).then($location.path('/samples'));
+        Samples.save($scope.sample);
+    }
+    
+    $scope.cancelAnalysis = function() {
+    	$scope.sample.status = 'KILLED';
+        Samples.save($scope.sample);
     }
 });
 
