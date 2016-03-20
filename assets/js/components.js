@@ -12,9 +12,23 @@ c.directive('datePicker', function() {
 c.directive('dropzone', function() {
     return {
         restrict: 'A,E',
+        scope: {
+            sid: '='
+        },
         link: function(scope, element, attrs, controller) {
-            element.dropzone({
-                url: "/file/post",
+            scope.$watch('sid', function() {
+                if (scope.sid) {
+                    // TODO: Tie this to a real url later
+                    var url = "/samples/" + scope.sid + '/files/new';
+                    element.dropzone({
+                        url: url,
+                        init: function() {
+                            this.on("addedfile", function(file) {
+                                scope.$parent.addFile(file.name);
+                            });
+                        }
+                    });
+                }
             });
         }
     };

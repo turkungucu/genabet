@@ -36,8 +36,8 @@
 					    <p class="text-muted m-b-30 font-13">
 					    	
 					    </p>
-						<div class="alert alert-danger" ng-show="errorMessage">
-			    			{{errorMessage}}
+						<div class="alert alert-danger" ng-show="saveSampleErrorMessage">
+			    			{{saveSampleErrorMessage}}
 		       			</div>
 					    <form role="form" class="form-horizontal" ng-submit="saveSample()" data-parsley-validate>
 					        <div class="form-group">
@@ -70,9 +70,17 @@
 		          	</div>
 
 		          	<div id="analyze" class="tab-pane" ng-class="step === 2 ? 'active' : ''">
+		          		<div class="alert alert-danger" ng-show="analyzeSampleErrorMessage">
+			    			{{analyzeSampleErrorMessage}}
+		       			</div>
 		          		<div ng-hide="'PROCESSING' === sample.status">
 					    	<label for="fupload">File Upload</label>
-					    	<div class="dropzone" id="fupload" dropzone></div>
+					    	<div class="dropzone" id="fupload" dropzone sid="sample.id"></div>
+					    	<div class="m-t-10">
+					    		<ul>
+					    			<li ng-repeat="file in sample.files">{{file}}</li>
+					    		</ul>
+					    	</div>
 					    	<button class="btn btn-purple waves-effect waves-light m-t-10" ng-click="analyzeSample()">Analyze</button>
 					    </div>
 
