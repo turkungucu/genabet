@@ -115,6 +115,7 @@ c.directive('sampleTable', function() {
                                     labelClass = 'label-purple';
                                 } else if ('KILLED' == status) {
                                     labelClass = 'label-danger';
+                                    data = 'CANCELLED'
                                 }
 
                                 if ('PROCESSING' === status) {
