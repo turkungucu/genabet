@@ -37,6 +37,8 @@ app.config(function($routeProvider) {
     }).when('/samples/:id/results', {
         controller: 'ResultsCtrl',
         templateUrl: 'results.html'
+    }).when('/samples/:id/files/new', {
+        controller: 'UploadFileCtrl'
     }).otherwise({
         redirectTo: '/'
     });
@@ -369,18 +371,19 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
         });
 
         if (sampleExists) {
-            $scope.errorMessage = 'Sample with name ' + sampleName + ' already exists for this patient';
+            $scope.saveSampleErrorMessage = 'Sample with name ' + sampleName + ' already exists for this patient';
         } else {
             successFn();
         }
     }
 
     $scope.saveSample = function() {
-        $scope.errorMessage = '';
+        $scope.saveSampleErrorMessage = '';
+        $scope.analyzeSampleErrorMessage = '';
 
         var extDate = this.sample.extractionDate;
         if (Date.parse(extDate) > Date.now()) {
-            $scope.errorMessage = 'Extraction date cannot in the future';
+            $scope.saveSampleErrorMessage = 'Extraction date cannot in the future';
             return;
         }
 
@@ -411,10 +414,22 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
         }
     };
 
+    $scope.addFile = function(filename) {
+        var files = $scope.sample.files;
+        if (!files) files = [];
+        files.push(filename);
+        $scope.sample.files = files;
+        Samples.save($scope.sample).then($scope.$apply());
+    }
+
     $scope.analyzeSample = function() {
-        $scope.sample.processingStartTs = Date.now();
-        $scope.sample.status = 'PROCESSING';
-        Samples.save($scope.sample);
+        if (!$scope.sample.files || $scope.sample.files.length === 0) {
+            $scope.analyzeSampleErrorMessage = 'Cannot analyze a sample that has no files';
+        } else {
+            $scope.sample.processingStartTs = Date.now();
+            $scope.sample.status = 'PROCESSING';
+            Samples.save($scope.sample).then($scope.analyzeSampleErrorMessage = '');
+        }
     }
 
     $scope.cancelAnalysis = function() {
@@ -641,6 +656,15 @@ app.controller('ResultsCtrl', function($scope, $routeParams, $location, $q, fbRe
             $scope.geneTotalsData = toPieChartData(geneTotals);
             var tissueTotals = aggregateMutationsByTissue($scope.sample.mutations);
             $scope.tissueTotalsData = toPieChartData(tissueTotals);
+        });
+    }
+});
+
+app.controller('UploadFileCtrl', function($scope, $routeParams, $location, $q, fbRef, Patients, Samples) {
+    var sampleId = $routeParams.id;
+    if (sampleId) {
+        Samples.get(sampleId).then(function(sample) {
+            console.log('Save file data');
         });
     }
 });
