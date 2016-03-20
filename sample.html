@@ -2,7 +2,7 @@
     <div class="col-sm-12">
         <h4 class="page-title">{{sample ? 'Edit' : 'New'}} Sample</h4>
 		<div class="alert alert-success col-lg-8" ng-show="'PROCESSING' === sample.status">
-            <i class="fa fa-circle-o-notch fa-spin"></i> &nbsp;Processing since 3 hours ago
+            <i class="fa fa-circle-o-notch fa-spin"></i> &nbsp;Processing <span ng-if="sample.processingStartTs">since {{sample.processingStartTs | toHumanDate}}</span>
         </div>
     </div>
 </div>
@@ -76,7 +76,7 @@
 					    	<button class="btn btn-purple waves-effect waves-light m-t-10" ng-click="analyzeSample()">Analyze</button>
 					    </div>
 
-						<div class="alert alert-danger" ng-show="'PROCESSING' === sample.status">
+						<div class="alert alert-default" ng-show="'PROCESSING' === sample.status">
                             This sample is currently being analyzed. You may cancel the process by pressing Cancel button below.
                         </div>
 

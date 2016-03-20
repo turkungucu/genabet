@@ -112,7 +112,13 @@ c.directive('sampleTable', function() {
                         }, {
                             data: 'dateCreated',
                             render: function(data, type, row, meta) {
-                                if(type == 'sort') return data;
+                                if (type == 'sort') return data;
+                                return data ? moment(data).fromNow() : '';
+                            }
+                        }, {
+                            data: 'processingStartTs',
+                            render: function(data, type, row, meta) {
+                                if (type == 'sort') return data ? data : '';
                                 return data ? moment(data).fromNow() : '';
                             }
                         }, {
@@ -260,10 +266,16 @@ c.directive('progressChart', function() {
                         var chart = new google.visualization.AreaChart(element[0]);
                         chart.draw(data, options);
                     }
-                    
+
                     google.charts.setOnLoadCallback(drawChart);
                 }
             });
         }
+    };
+});
+
+c.filter('toHumanDate', function() {
+    return function(dateStr) {
+        return dateStr != null ? moment(dateStr).fromNow() : "";
     };
 });
