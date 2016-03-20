@@ -67,7 +67,9 @@
 					    	</span>
 
 					    	<span ng-if="'PROCESSING' === s.status">
-					    		<span class="label label-purple">{{s.status}}</span>
+					    		<span class="label label-purple">
+					    			<i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;{{s.status}}
+					    		</span>
 					    	</span>
 					    	
 					    	<span ng-if="'KILLED' === s.status">
