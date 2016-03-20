@@ -763,7 +763,7 @@ pre {
   padding: 12px 20px;
 }
 .list-group-item:hover {
-  background: rgba(152, 166, 173, 0.1);
+  /*background: rgba(152, 166, 173, 0.1);*/
 }
 .list-group-item-heading {
   font-weight: 300;

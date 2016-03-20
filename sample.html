@@ -20,13 +20,13 @@
 		            <li ng-class="step === 1 ? 'active' : ''">
 		              <a aria-expanded="true" data-toggle="tab" ng-click="step = 1">
 		                <span class="visible-xs"><i class="fa fa-flask"></i></span>
-		                <span class="hidden-xs">Details</span>
+		                <span class="hidden-xs">1. Details</span>
 		              </a>
 		            </li>
 		            <li ng-class="step === 2 ? 'active' : ''">
 		              <a aria-expanded="false" data-toggle="tab" ng-click="step = 2">
 		                <span class="visible-xs"><i class="fa fa-medkit"></i></span>
-		                <span class="hidden-xs">Analyze</span>
+		                <span class="hidden-xs">2. Analyze</span>
 		              </a>
 		            </li>
 		        </ul>
@@ -76,21 +76,26 @@
 		          		<div ng-hide="'PROCESSING' === sample.status">
 					    	<label for="fupload">File Upload</label>
 					    	<div class="dropzone" id="fupload" dropzone sid="sample.id"></div>
-					    	<div class="m-t-10">
-					    		<ul>
-					    			<li ng-repeat="file in sample.files">{{file}}</li>
-					    		</ul>
-					    	</div>
 					    	<button class="btn btn-purple waves-effect waves-light m-t-10" ng-click="analyzeSample()">Analyze</button>
 					    </div>
 
-						<div class="alert alert-default" ng-show="'PROCESSING' === sample.status">
-                            This sample is currently being analyzed. You may cancel the process by pressing Cancel button below.
-                        </div>
+					    <div class="m-t-20" ng-show="sample.files.length > 0">
+					    	<label>Uploaded Files</label>
+				    		<ul class="list-group">
+				    			<li class="list-group-item" ng-repeat="file in sample.files" style="border: none;padding-left: 10px;">
+				    				<i class="fa fa-angle-right m-r-10"></i>{{file}}
+				    			</li>
+				    		</ul>
+				    	</div>
 
-                        <div class="row text-center" ng-show="'PROCESSING' === sample.status">
-                        	<button type="button" class="btn btn-danger waves-effect waves-light" ng-click="cancelAnalysis()">Cancel</button>
-                        	<a href="#/patients/{{patient.id}}?step=1" role="button" class="btn btn-default waves-effect waves-light">Back to Samples</a>
+				    	<div class="well" ng-show="'PROCESSING' === sample.status" style="margin-bottom: 0px;">
+							<div>
+                            	This sample is currently being analyzed. You may cancel the process by pressing Cancel button below.
+                            </div>
+                            <div class="m-t-20" ng-show="'PROCESSING' === sample.status">
+	                        	<button type="button" class="btn btn-danger waves-effect waves-light" ng-click="cancelAnalysis()">Cancel</button>
+	                        	<a href="#/patients/{{patient.id}}?step=1" role="button" class="btn btn-default waves-effect waves-light">Back to Samples</a>
+	                        </div>
                         </div>
 		          	</div>
 		        </div>
