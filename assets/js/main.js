@@ -263,30 +263,34 @@ app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients
                 type: 'DIAGNOSIS'
             });
             var ptrs = patient.treatments;
-            Object.keys(ptrs).forEach(function(trid) {
-                var treatment = ptrs[trid];
-                historyEvents.push({
-                    title: 'Started using ' + treatment.drug,
-                    ts: treatment.startDate,
-                    type: 'TREATMENT'
-                });
-                if (treatment.stopDate) {
+            if (ptrs) {
+                Object.keys(ptrs).forEach(function(trid) {
+                    var treatment = ptrs[trid];
                     historyEvents.push({
-                        title: 'Stopped using ' + treatment.drug,
-                        ts: treatment.stopDate,
+                        title: 'Started using ' + treatment.drug,
+                        ts: treatment.startDate,
                         type: 'TREATMENT'
                     });
-                }
-            });
-            var ss = patient.samples;
-            Object.keys(ss).forEach(function(sid) {
-                var sample = ss[sid];
-                historyEvents.push({
-                    title: 'Sample ' + sample.name + " extracted",
-                    ts: sample.extractionDate,
-                    type: 'SAMPLE'
+                    if (treatment.stopDate) {
+                        historyEvents.push({
+                            title: 'Stopped using ' + treatment.drug,
+                            ts: treatment.stopDate,
+                            type: 'TREATMENT'
+                        });
+                    }
                 });
-            });
+            }
+            var ss = patient.samples;
+            if (ss) {
+                Object.keys(ss).forEach(function(sid) {
+                    var sample = ss[sid];
+                    historyEvents.push({
+                        title: 'Sample ' + sample.name + " extracted",
+                        ts: sample.extractionDate,
+                        type: 'SAMPLE'
+                    });
+                });
+            }
             historyEvents.sort(function(first, second) {
                 return Date.parse(first.ts) - Date.parse(second.ts);
             });
@@ -326,7 +330,10 @@ app.controller('SavePatientCtrl', function($scope, $location, $routeParams, Pati
         if ($scope.patient) {
             patient.id = $scope.patient.id;
         }
-        Patients.save(patient).then($location.path('/patients/' + patient.id).search('step', '5'));
+
+        Patients.save(patient).then(function(response) {
+            $location.path('/patients/' + response.key()).search('step', '5');
+        });
     }
 
     $scope.removePatient = function() {
