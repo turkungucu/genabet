@@ -170,7 +170,7 @@ app.controller('PatientCtrl', function($scope, $location, $routeParams, Patients
             ['12', 100, undefined, 1200]
         ],
         [
-            ['Mutation Level', 'EGFR 790M', 'Osimertinib'],
+            ['Mutation Level', 'EGFR T790M', 'Osimertinib'],
             ['1', 200, undefined],
             ['2', 250, undefined],
             ['3', 180, 300],
