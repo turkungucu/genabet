@@ -53,6 +53,28 @@
 								</div>
 					        </div>
 					        <div class="form-group">
+					        	<label for="source" class="col-sm-2 control-label">Source</label>
+					        	<div class="col-sm-10">
+					        		<!--  <select id="source" ng-model="sample.source" ng-options="s for s in sampleSources"></select> -->
+					        		<div class="radio radio-info radio-inline">
+	                                	<input type="radio" id="blood-radio" value="Blood" ng-model="sample.source">
+	                                	<label for="blood-radio">Blood</label>
+	                                </div>
+	                                <div class="radio radio-info radio-inline">
+	                                	<input type="radio" id="pleural-radio" value="Pleural fluid" ng-model="sample.source">
+	                                	<label for="pleural-radio">Pleural fluid</label>
+	                                </div>
+	                                <div class="radio radio-info radio-inline">
+	                                	<input type="radio" id="saliva-radio" value="Saliva" ng-model="sample.source">
+	                                	<label for="saliva-radio">Saliva</label>
+	                                </div>
+	                                <div class="radio radio-info radio-inline">
+	                                	<input type="radio" id="urine-radio" value="Urine" ng-model="sample.source">
+	                                	<label for="urine-radio">Urine</label>
+	                                </div>
+                            	</div>
+					        </div>
+					        <div class="form-group">
 					        	<label for="extractionDate" class="col-sm-2 control-label">Extraction Date</label>
 					        	<div class="col-sm-10">
 									<input type="text" class="form-control" id="extractionDate" placeholder="mm/dd/yyyy"

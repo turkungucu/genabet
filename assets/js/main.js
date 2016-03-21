@@ -307,6 +307,11 @@ app.controller('SavePatientCtrl', function($scope, $location, $routeParams, Pati
             $scope.patient = patient;
         });
     }
+
+    $scope.cancerTypes = ['Breast cancer', 'Colorectal cancer', 'Liver cancer', 'Lung cancer', 'Melanoma',
+        'Nasopharyngeal carcinoma', 'Pancreatic cancer', 'Prostate cancer'
+    ];
+
     $scope.savePatient = function() {
         var now = Date.now();
         var birthDate = this.patient.birthDate;
@@ -334,7 +339,7 @@ app.controller('SavePatientCtrl', function($scope, $location, $routeParams, Pati
 
         var response = Patients.save(patient);
         if (!$scope.patient.id) {
-        	$scope.patient.id = response.key();
+            $scope.patient.id = response.key();
         }
         $location.path('/patients/' + $scope.patient.id).search('step', '5');
     }
@@ -401,6 +406,7 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
         var details = this.sample.details;
         var sample = {
             name: sampleName,
+            source: this.sample.source,
             extractionDate: extDate
         };
         if (details) {
@@ -417,8 +423,10 @@ app.controller('SampleCtrl', function($scope, $routeParams, $location, $q, fbRef
             checkExistingSample(sampleName, function() {
                 sample.status = 'CREATED';
                 var response = Samples.saveUnderPatient(sample, $scope.patient);
-                var sampleId = response.key();
-                redirectLink += '/samples/' + sampleId;
+                if (!$scope.sample.id) {
+                    $scope.sample.id = response.key();
+                }
+                redirectLink += '/samples/' + $scope.sample.id;
                 $location.path(redirectLink).search('step', '2');
             });
         }
