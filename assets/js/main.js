@@ -331,9 +331,9 @@ app.controller('SavePatientCtrl', function($scope, $location, $routeParams, Pati
             patient.id = $scope.patient.id;
         }
 
-        Patients.save(patient).then(function(response) {
-            $location.path('/patients/' + response.key()).search('step', '5');
-        });
+        var response = Patients.save(patient);
+        var patientId = response.key();
+        $location.path('/patients/' + patientId).search('step', '5');
     }
 
     $scope.removePatient = function() {
