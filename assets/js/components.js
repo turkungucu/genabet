@@ -273,7 +273,8 @@ c.directive('progressChart', function() {
                             },
                             series: {
                                 0: {
-                                    areaOpacity: 0.0
+                                    areaOpacity: 0.0,
+                                    pointSize: 3
                                 }
                             },
                             width: 900,
