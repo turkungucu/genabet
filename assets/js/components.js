@@ -260,7 +260,7 @@ c.directive('progressChart', function() {
                         var data = google.visualization.arrayToDataTable(scope.data);
 
                         var options = {
-                            title: 'Plasma Mutation Levels over Time',
+                            title: 'Mutation Levels Over Time',
                             hAxis: {
                                 title: 'Month',
                                 titleTextStyle: {

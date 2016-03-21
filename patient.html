@@ -49,13 +49,14 @@
 			</a>
 			<table class="table table-hover" ng-if="samples && samples.length > 0">
 				<thead>
-					<tr><th>Sample</th><th>Extraction date</th><th>Status</th><th>Results</th></tr>
+					<tr><th>Sample</th><th>Source</th><th>Extraction date</th><th>Status</th><th>Results</th></tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="s in samples">
 						<td>
 							<a href="#/patients/{{patient.id}}/samples/{{s.id}}">{{s.name}}</a>
 						</td>
+						<td>{{s.source}}</td>
 						<td>{{s.extractionDate}}</td>
 						<td>
 							<span ng-if="'READY' === s.status">
