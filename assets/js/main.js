@@ -120,6 +120,7 @@ app.service('Samples', ['fbRef', '$q', 'Patients', function(fbRef, $q, Patients)
         // Add their id,name pairs to the patient for fast lookup later
         saveUnderPatient: function(sample, patient) {
             sample.patientId = patient.id;
+            sample.patientName = patient.firstName + " " + patient.lastName;
             var response = s.save(sample);
             var sampleId = response.key();
             response.then(function() {
@@ -332,8 +333,10 @@ app.controller('SavePatientCtrl', function($scope, $location, $routeParams, Pati
         }
 
         var response = Patients.save(patient);
-        var patientId = response.key();
-        $location.path('/patients/' + patientId).search('step', '5');
+        if (!$scope.patient.id) {
+        	$scope.patient.id = response.key();
+        }
+        $location.path('/patients/' + $scope.patient.id).search('step', '5');
     }
 
     $scope.removePatient = function() {

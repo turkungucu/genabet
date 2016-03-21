@@ -93,11 +93,13 @@ c.directive('sampleTable', function() {
                             data: 'name',
                             defaultContent: '',
                             render: function(data, type, row, meta) {
-                                return '<a href="#/patients/' + row.patientId + '/samples/' + row.id + '">' + data + '</i></a>';
+                                return '<a href="#/patients/' + row.patientId + '/samples/' + row.id + '">' + data + '</a>';
                             }
                         }, {
-                            data: 'details',
-                            defaultContent: ''
+                            data: 'patient',
+                            render: function(data, type, row, meta) {
+                                return '<a href="#/patients/' + row.patientId + '">' + row.patientName + '</a>';
+                            }
                         }, {
                             data: 'status',
                             defaultContent: '',
