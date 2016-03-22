@@ -42,7 +42,9 @@
 				<div class="form-group">
 					<label for="diagnosis" class="col-sm-3 control-label">Diagnosis</label>
 					<div class="col-sm-9">
-						<select id="diagnosis" ng-model="patient.diagnosis" ng-options="ct for ct in cancerTypes" required></select>
+						<select id="diagnosis" class="form-control" ng-model="patient.diagnosis" ng-options="ct for ct in cancerTypes" required>
+							<option value="">Please select</option>
+						</select>
 					</div>
 				</div>
 				<div class="form-group">
