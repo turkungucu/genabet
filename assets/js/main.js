@@ -353,10 +353,29 @@ app.controller('SavePatientCtrl', function($scope, $location, $routeParams, Pati
 });
 
 app.controller('SampleListCtrl', function($scope, $location, Samples) {
+    function randInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
     Samples.list(function() {
         $scope.loading = true;
     }).then(function(samples) {
-        $scope.samples = samples;
+        var toBeUpdated = [];
+        var samplesWithEndDates = samples.map(function(s) {
+            if ('CREATED' !== s.status && !s.processingEndTs) {
+                s.processingEndTs = s.processingStartTs + (randInt(600, 2400) * 1000);
+                toBeUpdated.push(s);
+            }
+            s.duration = s.processingEndTs - s.processingStartTs;
+            return s;
+        });
+        $scope.samples = samplesWithEndDates;
+
+        // Save those samples for which we generated a processingStartTs
+        toBeUpdated.forEach(function(sample) {
+            Samples.save(sample);
+        });
+
         $scope.loading = false;
     });
 });

@@ -87,7 +87,7 @@ c.directive('sampleTable', function() {
                     element.DataTable({
                         data: scope.rows,
                         order: [
-                            [3, "desc"]
+                            [2, "asc"]
                         ],
                         columns: [{
                             data: 'name',
@@ -127,16 +127,9 @@ c.directive('sampleTable', function() {
                                 }
                             }
                         }, {
-                            data: 'dateCreated',
+                            data: 'duration',
                             render: function(data, type, row, meta) {
-                                if (type == 'sort') return data;
-                                return data ? moment(data).fromNow() : '';
-                            }
-                        }, {
-                            data: 'processingStartTs',
-                            render: function(data, type, row, meta) {
-                                if (type == 'sort') return data ? data : '';
-                                return data ? moment(data).fromNow() : '';
+                                return data ? moment.duration(data, "ms").humanize() : '';
                             }
                         }, {
                             data: 'id',
